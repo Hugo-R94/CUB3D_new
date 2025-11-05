@@ -1,0 +1,60 @@
+EXPLICATION DE CAST HORIZONTAL
+
+if (fabs(sin(angle)) < 0.000001)
+	{
+		*rx = data->player.px;
+		*ry = data->player.py;
+		return ;
+	}
+	
+si la valeur absolue de sin(angle) < 0.000001 alors l'angle est considere comme plat
+( 0* ou 180*) et ne pourra donc pas croise de ligne horizontale.
+on retourne donc la position du joueur pour eviter de chercher a l'infini.
+
+dof = 0;
+atan = -1.0f / tan(angle);
+
+dof (ou depth of field) sert uniquement de securite pour ne pas verifier trop loin.
+atan est une variable qui sert a changer la valeur de x en fonction de y.
+Sachant que la tangeante d'un angle equivaut a son cote oppose sur son cote adjacent,
+la  reciproque est : -y * atan = x
+ce que je ne comprends pas cest pourquoi atan = -1 / tan(angle);
+
+	if (angle > M_PI)
+	{
+		*ry = (int)data->player.py - 0.0001f;
+		*rx = (data->player.py - *ry) * atan + data->player.px;
+		yo = -1.0f;
+		xo = -yo * atan;
+	}
+	
+ensuite si l'angle est superieur a M_PI ca veut dire que le rayon est projeter vers le haut.
+Alors on modifie ry et rx (mais je ne comprends pas pourquoi ces valeurs, peut tu m'expliquer?)
+puis on defini yo a -1.0f puisque le rayon est projeter au dessus dans la grille soit a des valeurs 
+inferieur a y.
+xo est donc determiner a partir de atan et de yo mais je comprends pas pourquoi on prends la valeurs negative
+de yo.
+
+	else
+	{
+		*ry = (int)data->player.py + 1.0f;
+		*rx = (data->player.py - *ry) * atan + data->player.px;
+		yo = 1.0f;
+		xo = -yo * atan;
+	} 
+ici cest linverse mais le meme principe, cest si le rayon est projeter vers le bas.
+en revanche je ne comprends pas non plus les valeur attribuer a ry et rx.
+
+	while (dof < 100)
+	{
+		if (is_wall_hit(data, (int)(*rx), (int)(*ry)))
+			break ;
+		*rx += xo;
+		*ry += yo;
+		dof++;
+	} 
+
+la cest simple, on parcours les cases de la map jusqua ce que l on rencontre un mur.
+si au bout de 100 iterations on ne rencontre pas de mur on arrete.
+on incremente les valeurs rx par xo et ry par yo a chaque fois puisque celle ci permette
+davancer sur laxe du rayon.

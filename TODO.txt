@@ -1,0 +1,2 @@
+- Norme faites jusqu 'a init_texture.c
+- faire la mandatory part
