@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 12:08:14 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/28 16:24:08 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/10 11:54:59 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,10 @@ void	draw_mini_map_centered(t_data *data, int radius, int thickness,
 	draw_map_tiles(data, center, params);
 	draw_circle(data, (int []){center[0], center[1], radius, thickness},
 		0xFCA612);
+	// draw_rays_on_minimap(data,center[0] - data->player.px * TILE_SIZE,
+	// 		 center[1] - data->player.py * TILE_SIZE);
 	draw_player(data, center[0] - data->player.px * TILE_SIZE,
 		center[1] - data->player.py * TILE_SIZE);
+	draw_rays_3d_bonus(data, center[0] - data->player.px * TILE_SIZE,
+			center[1] - data->player.py * TILE_SIZE);
 }

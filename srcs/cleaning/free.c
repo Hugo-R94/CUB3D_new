@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:38:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 13:28:52 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/10 12:42:39 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ void	clean_data(t_data *data)
 			free_map(data->map->map);
 		free(data->map);
 	}
-	free(data->ceiling);
+
+	if (data->raycast_f)
+		free(data->raycast_f);
 	free(data);
 }
 

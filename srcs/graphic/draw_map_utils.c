@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:24:09 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/28 16:24:43 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/10 11:52:48 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,28 @@ void	draw_tile(t_win *win, int x, int y, int color)
 		}
 	}
 }
-
+void    draw_rays_on_minimap(t_data *data, int offset_x, int offset_y)
+{
+    int     i;
+    float   x[2];
+    float   y[2];
+    
+    if (!data->raycast_f)
+        return;
+    
+    i = 0;
+    while (i < 640)
+    {
+        x[0] = offset_x + data->player.px * TILE_SIZE;
+        x[1] = offset_x + data->raycast_f[i].rx * TILE_SIZE;
+        y[0] = offset_y + data->player.py * TILE_SIZE;
+        y[1] = offset_y + data->raycast_f[i].ry * TILE_SIZE;
+        
+        draw_line(data->win, x, y, 0x00FF00);
+        
+        i++;  // Vous pouvez augmenter le pas (i += 5) pour moins de rayons
+    }
+}
 void	draw_player(t_data *data, int offset_x, int offset_y)
 {
 	int	center_x;
@@ -68,5 +89,7 @@ void	draw_player(t_data *data, int offset_x, int offset_y)
 				center_y + idx[0], color);
 		}
 	}
-	draw_rays_3d(data, offset_x, offset_y);
+	// draw_rays_3d(data, offset_x, offset_y);
+	// draw_rays_3d_bonus(data,offset_x,offset_x);
+	// draw_rays_on_minimap(data,offset_x, offset_y);
 }

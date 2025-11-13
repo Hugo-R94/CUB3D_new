@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wall_render_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:48:18 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 14:17:04 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/13 16:59:11 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void prepare_wall_column(t_column_info *c, int line_h, int line_off, t_im
 {
 	c->screen_h = 480;
 	c->line_h = line_h;
-	c->step = (float)img->height / line_h;
+	c->step = (float)img->height / line_h ;
 	c->tex_pos = 0.0f;
 
 	c->start_y = 0;
@@ -40,6 +40,8 @@ void draw_wall_column(t_data *data, int value[5], t_img *img, int depth)
 {
 	t_column_info	c;
 	int 		screen_y;
+	int index;
+
 	prepare_wall_column(&c, value[2], value[3], img);
 
 	for (c.y = c.start_y; c.y < c.end_y; c.y++)
@@ -48,13 +50,20 @@ void draw_wall_column(t_data *data, int value[5], t_img *img, int depth)
 
 		if (screen_y >= 0 && screen_y < c.screen_h)
 		{
+			index = value[0] + screen_y * data->render_gmp->width;
+
 			c.tex_y = (int)c.tex_pos;
 			if (c.tex_y >= img->height)
 				c.tex_y = img->height - 1;
 
-			c.color = depth_render(get_pixel(img, value[4], c.tex_y), depth);
+			c.color =get_pixel(img, value[4], c.tex_y), depth;
 			if (c.color != 0x000000)
-				put_pixel(data->win->img, value[0], screen_y, c.color);
+			{
+				data->render_gmp->pixels[index].color = c.color;
+				data->render_gmp->pixels[index].depth = depth;
+				data->render_gmp->pixels[index].type = PX_DOOR;
+				// put_pixel(data->win->img, value[0], screen_y, c.color);
+			}
 		}
 		c.tex_pos += c.step;
 	}

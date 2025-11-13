@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_mand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:35:05 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/28 15:36:03 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/10 12:14:41 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	clean_exit_mand(t_data *data)
 {
 	if (!data)
 		return ;
+
 	if (data->map)
 	{
 		free_map_struct(data, data->map);
@@ -76,6 +77,8 @@ void	clean_exit_mand(t_data *data)
 	}
 	if (data->win)
 		clean_windows(data->win);
+	if (data->raycast_f)
+		free(data->raycast_f);
 	free(data);
 	exit(0);
 }

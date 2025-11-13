@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_texture_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 12:51:39 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 13:57:12 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/13 17:03:15 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,32 @@ const char *texture_names[] =
 	"Home_ash",
 	"Home_title",
 	"HUD",
+	"black",
 	"wall_wood",
+	"slider_base",
+	"slider_button",
 	"wall",
 	"button",
+	"shot",
 	"button_200x125",
 	"Ash_100",
 	"Ash_75",
+	"hand_right",
+	"hand_left",
+	"skull",
+	"cloud_1",
 	"Ash_50",
 	"Ash_25",
 	"test",
 	"cloud",
 	"door",
+	"wall_re",
+	"door_close",
 	"gamemode_endless",
 	"ground",
+	"mob",
 	"gamemode_survivor",
+	"aim",
 	"gamemode_mandatory",
 	"gamemode_mainmenu",
 	"necronomicon",

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:24:36 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 13:30:41 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/10 12:57:45 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,19 @@ int	clean_and_exit(t_data *data, int exit_code)
 {
 	if (data)
 	{
+		if (data->ceiling)
+		{
+			if (data->ceiling->image)
+				mlx_destroy_image(data->win->mlx, data->ceiling);
+			if(data->ceiling)
+				free(data->ceiling);
+		}
 		clean_windows(data->win);
 		clean_data(data);
 	}
 	exit(exit_code);
 }
+
 void destroy_all_img(t_data *data)
 {
 	int i;

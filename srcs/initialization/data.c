@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:17:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 13:31:09 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/13 17:25:05 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,30 @@ void	init_data_part1(t_data *data)
 	data->player.parralax_x = 0;
 	data->o_is_press = 0;
 	data->fov = M_PI / 3;
+	printf("fov = %f\n",data->fov);
 	data->in_game = 0;
 	data->fps_cap = 30;
+	data->slider_button1 = 0;
+	data->slider_button2 = 0;
 	data->a_is_press = 0;
 	data->w_is_press = 0;
 	data->s_is_press = 0;
+	data->shot1 = 0;
 	data->d_is_press = 0;
 	data->player.rot_speed = (data->res_x * 0.000009375) * 10;
 	data->player.mouv_speed = (data->res_x * 0.00003125) * 5;
 	data->win_op = 1;
+	data->timer = 0;
+	// data->slider_button[0] = 0;
+	data->player.pl_height = 0;
+	data->offset_door_ratio = 0.0f;
+	data->mouse.sensitivity =  0.001f;
+	data->raycast_f = calloc(640 ,sizeof(t_raycast));
+    if (!data->raycast_f)
+    {
+        printf("Error: malloc raycast_final failed\n");
+        exit(1);
+    }
 }
 
 t_data	*init_data(void)
@@ -64,6 +79,8 @@ t_data	*init_data(void)
 	init_data_part1(data);
 	if (!data->ceiling)
 		perror("mlx_new_image ceiling");
+	data->render_gmp = mlx_new_image(data->win->mlx, data->res_x, data->res_y);
+	data->render_gmp->pixels = calloc(data->res_x * data->res_y,sizeof(t_px));
 	data->txt = init_textures(data);
 	if (!data->txt)
 		perror("calloc txt");

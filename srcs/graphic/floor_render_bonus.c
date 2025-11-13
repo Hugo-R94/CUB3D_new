@@ -3,21 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   floor_render_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:37:41 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 14:11:19 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/13 17:13:56 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
 #ifdef BONUS
-/* ************************************************************************** */
-/*   Calcule la distance au sol pour une ligne y donnée                      */
-/*   Plus y est grand (bas de l'écran), plus le sol est proche               */
-/* ************************************************************************** */
 
+/* --- Calcule la distance au sol pour une ligne y donnée --- */
 static double	get_row_distance(int y, double tilt)
 {
 	double	p;
@@ -32,11 +29,7 @@ static double	get_row_distance(int y, double tilt)
 	return (row_dist);
 }
 
-/* ************************************************************************** */
-/*   Calcule la direction du rayon pour la colonne x                         */
-/*   cameraX varie de -1 (gauche) à +1 (droite)                              */
-/* ************************************************************************** */
-
+/* --- Calcule la direction du rayon pour la colonne x --- */
 static void	get_ray_dir(double *ray_x, double *ray_y, t_data *data, int x)
 {
 	double	camera_x;
@@ -54,11 +47,7 @@ static void	get_ray_dir(double *ray_x, double *ray_y, t_data *data, int x)
 	*ray_y = dir_y + plane_y * camera_x;
 }
 
-/* ************************************************************************** */
-/*   Calcule la position monde (floorX, floorY) du point de sol              */
-/*   position = position_joueur + distance * direction_rayon                 */
-/* ************************************************************************** */
-
+/* --- Calcule la position monde du point du sol --- */
 static void	get_floor_pos(double *fx, double *fy, t_data *data, double *ray)
 {
 	double	row_dist;
@@ -68,15 +57,11 @@ static void	get_floor_pos(double *fx, double *fy, t_data *data, double *ray)
 	*fy = data->player.py + row_dist * ray[1];
 }
 
-/* ************************************************************************** */
-/*   Convertit position monde en coordonnées de texture (texX, texY)         */
-/*   Extrait la partie fractionnaire et la mappe sur la texture              */
-/* ************************************************************************** */
-
+/* --- Convertit position monde en coordonnées de texture --- */
 static void	get_tex_coords(int *tex_x, int *tex_y, double *floor, t_img *img)
 {
-	int		cell_x;
-	int		cell_y;
+	int	cell_x;
+	int	cell_y;
 
 	cell_x = (int)floor[0];
 	cell_y = (int)floor[1];
@@ -84,32 +69,37 @@ static void	get_tex_coords(int *tex_x, int *tex_y, double *floor, t_img *img)
 	*tex_y = (int)(img->height * (floor[1] - cell_y)) & (img->height - 1);
 }
 
-/* ************************************************************************** */
-/*   Dessine un pixel du sol avec texture et atténuation de profondeur       */
-/* ************************************************************************** */
-
+/* --- Dessine un pixel du sol dans le framebuffer logique (render_gmp) --- */
 static void	draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
 {
 	double		ray[3];
 	double		floor_pos[2];
 	int			tex[2];
 	uint32_t	color;
+	int			index;
+	double		depth;
 
 	get_ray_dir(&ray[0], &ray[1], data, x);
-	ray[2] = get_row_distance(y, data->tilt);
+	depth = get_row_distance(y, data->tilt + data->player.pl_height);
+	ray[2] = depth;
 	get_floor_pos(&floor_pos[0], &floor_pos[1], data, ray);
 	get_tex_coords(&tex[0], &tex[1], floor_pos, &floor->img);
+
 	color = get_pixel(&floor->img, tex[0], tex[1]);
-	color = depth_render(color, ray[2]);
+	color = depth_render(color, depth);
+
 	if (color != 0x000000)
-		put_pixel(data->win->img, x, y, color);
+	{
+		index = y * data->render_gmp->width + x;
+
+		// Vérifie si le pixel actuel est plus proche que celui déjà stocké
+		data->render_gmp->pixels[index].color = color;
+		data->render_gmp->pixels[index].depth = depth;
+		data->render_gmp->pixels[index].type = PX_EMPTY; // PX_FLOOR si tu veux un type dédié
+	}
 }
 
-/* ************************************************************************** */
-/*   Fonction principale : dessine le sol pour la colonne x                  */
-/*   Boucle sur toutes les lignes à partir de y_start                        */
-/* ************************************************************************** */
-
+/* --- Fonction principale : dessine le sol pour la colonne x --- */
 void	draw_floor(t_data *data, int x, int y_start)
 {
 	t_txt	*floor;

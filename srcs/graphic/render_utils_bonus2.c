@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils_bonus2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:51:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 11:52:44 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/06 17:16:00 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ uint32_t darken_color(uint32_t color, float factor)
 
 uint32_t	depth_render(uint32_t color, int ray_length)
 {
-	if ((int)ray_length <= 2)
-		return(color);
+	if ((int)ray_length <=4 )
+		return(darken_color(color, (0.05 * (float)((ray_length)))));
+	else if (ray_length <= 12)
+		return(darken_color(color, (0.05 * (float)((ray_length * ray_length) / 4))));
 	else if (ray_length <=20)
-		return(darken_color(color, (0.05 * (float)ray_length)));
+		return(darken_color(color, (0.05 * (float)((ray_length * ray_length) / 3))));
 	else
 		return(0x100000);
 }

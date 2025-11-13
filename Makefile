@@ -6,7 +6,7 @@ NAME        = cub3D
 NAME_BONUS  = cub3D_bonus
 CC          = cc
 # CFLAGS      = -Wall -Wextra -Werror -g -fPIC
-CFLAGS		=
+CFLAGS		= -g
 # ===========================
 #        DIRECTORIES
 # ===========================
@@ -23,7 +23,7 @@ BONUS_DIR   = $(SRC_DIR)/bonus
 OBJ_DIR     = objs
 INC_DIR     = includes
 LIBFT_DIR   = My_libft
-MLX_DIR     = minilibx_linux
+MLX_DIR     = minilibx-linux
 
 # ===========================
 #        LIBRARIES
@@ -66,6 +66,8 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/raycasting.c \
 				$(GRP_DIR)/raycasting_h.c \
 				$(GRP_DIR)/floor_render_bonus.c \
+				srcs/gameplay/mob.c \
+				$(GRP_DIR)/draw_mob.c \
 				$(GRP_DIR)/ceiling_render_bonus.c \
 				$(GRP_DIR)/wall_render_bonus.c \
 				$(GRP_DIR)/render_utils_bonus.c \

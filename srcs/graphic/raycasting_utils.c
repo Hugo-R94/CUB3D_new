@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:12:32 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 14:49:42 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/12 12:35:00 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,20 @@ int is_door_hit(t_data *data, int mx, int my)
 		return (0);
 	if (mx < 0 || mx >= (int)ft_strlen(data->map->map[my]))
 		return (0);
-	return (data->map->map[my][mx] == 'D');
+	return (data->map->map[my][mx] == 'L' || data->map->map[my][mx] == 'D');
 }
+
+int is_mob(t_data *data, int mx, int my)
+{
+	if (!is_valid_map(data))
+		return (0);
+	if (my < 0 || my >= data->map->height)
+		return (0);
+	if (mx < 0 || mx >= (int)ft_strlen(data->map->map[my]))
+		return (0);
+	return (data->map->map[my][mx] == 'M');
+}
+
 #else 
 
 int	is_wall_hit(t_data *data, int mx, int my)

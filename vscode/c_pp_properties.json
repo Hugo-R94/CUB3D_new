@@ -1,0 +1,31 @@
+// Source - https://stackoverflow.com/questions/78477694/usage-of-ifdef-statements-for-c-code-in-vscode
+// Posted by Eugene Sh.
+// Retrieved 05/11/2025, License - CC-BY-SA 4.0
+
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "BONUS"
+            ],
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        },
+        {
+            "name": "WSL",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "BAR"
+            ],
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

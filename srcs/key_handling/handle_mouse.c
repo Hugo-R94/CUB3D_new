@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_mouse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 15:25:16 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/30 16:45:20 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/07 12:13:11 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ int	handle_mouse_click(int button, int x, int y, t_data *data)
 	float		scale[2];
 	int			mouse_scaled[2];
 	t_button	*b;
-
+	data->mouse.mouse_pressed = 1;
 	if (button != 1)
 		return (0);
-
 	scale[0] = 640.0f / (float)data->res_x;
 	scale[1] = 480.0f / (float)data->res_y;
 	mouse_scaled[0] = (int)(x * scale[0]);
@@ -42,6 +41,25 @@ int	handle_mouse_click(int button, int x, int y, t_data *data)
 	return (0);
 }
 
+int handle_mouse_press(int button, int x, int y, t_data *data)
+{
+	if (button == 1) // bouton gauche
+		data->mouse.mouse_pressed = 1;
+	if (data->mouse.mouse_pressed == 1)
+		printf("mouse preessed\n");
+	data->mouse.mouse_x = x;
+	data->mouse.mouse_y = y;
+	return (0);
+}
+
+int handle_mouse_release(int button, int x, int y, t_data *data)
+{
+	if (button == 1)
+		data->mouse.mouse_pressed = 0;
+	data->mouse.mouse_x = x;
+	data->mouse.mouse_y = y;
+	return (0);
+}
 /*
  * update_mouse_pos_menu :
  *   - convertit la position écran -> coordonnées UI (640x480 base)
@@ -85,8 +103,7 @@ void update_mouse_pos_game(t_data *data, int x, int y)
 	int center_y;
 	int delta_x;
 	int delta_y;
-	float sensitivity;
-
+	float sensitivity = 0.0001f;
 	/* proteger contre data null */
 	if (!data || !data->win)
 		return ;
@@ -97,21 +114,19 @@ void update_mouse_pos_game(t_data *data, int x, int y)
 	delta_x = x - center_x;
 	delta_y = y - center_y;
 
-	/* sensibilité, ajuste si trop lent/rapide */
-	sensitivity = 0.001f;
-
 	/* appliquer rotation */
-	data->player.pa += delta_x * sensitivity;
-	data->player.parralax_x += (delta_x * sensitivity) * (18.0f * M_PI);
+	data->player.pa += delta_x * data->mouse.sensitivity / 1.5;
+	data->player.parralax_x += (delta_x * data->mouse.sensitivity) * (18.0f * M_PI);
 	if (data->player.pa < 0)
 		data->player.pa += 2.0f * M_PI;
 	else if (data->player.pa >= 2.0f * M_PI)
 		data->player.pa -= 2.0f * M_PI;
 
 	/* update tilt (regard vertical) si tu veux */
-	data->tilt -= delta_y / 2;
+	data->tilt -= (delta_y * (data->mouse.sensitivity * 350));
+	// data->tilt -= (delta_y / 2);//hein
 	if (data->tilt > 200)
-		data->tilt = 200;
+		data->tilt = 200;	
 	if (data->tilt < -200)
 		data->tilt = -200;
 	/* stocker delta pour debug / usage */

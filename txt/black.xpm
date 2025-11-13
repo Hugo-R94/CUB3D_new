@@ -1,0 +1,7 @@
+/* XPM */
+static char * black[] = {
+"1 1 1 1",
+". c #000001",
+/* pixels */	
+"."
+}

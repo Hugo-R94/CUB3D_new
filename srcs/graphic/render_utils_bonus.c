@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:41:51 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 14:09:19 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/13 17:04:11 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 static t_txt *get_texture_by_letter(t_data *data, char letter)
 {
 	if (letter == '1')
-		return (find_texture(data->txt, "wall"));
+		return (find_texture(data->txt, "wall_re"));
 	if (letter == '2')
 	{
 		// printf("cest un mur bois\n");
-		return (find_texture(data->txt, "wall"));
+		return (find_texture(data->txt, "wall_re"));
 	}
 	if (letter == '3')
 		return(find_texture(data->txt, "necronomicon"));
@@ -33,7 +33,14 @@ static t_txt *get_texture_by_letter(t_data *data, char letter)
 		// printf("la cest une porte \n");
 		return (find_texture(data->txt, "door"));
 	}
-	return (find_texture(data->txt, "Home_ash"));
+	else if (letter == 'L')
+	{
+		// printf("la cest une porte ouverte\n");
+		return (find_texture(data->txt, "door"));
+	}
+	else if (letter == 'M')
+		return (find_texture(data->txt, "mob"));
+	return (find_texture(data->txt, "black"));
 }
 
 /*

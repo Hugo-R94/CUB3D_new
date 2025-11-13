@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 10:46:03 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/04 14:54:09 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/06 16:15:44 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,23 @@ void	draw_rect(t_data *data, int pos[2], int scale[2], int color)
 	{
 		put_pixel(data->win->img, pos[0], pos[1] + j, color);
 		put_pixel(data->win->img, pos[0] + scale[0] - 1, pos[1] + j, color);
+		j++;
+	}
+}
+void	draw_rect_fill(t_data *data, int pos[2], int scale[2], int color)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while(j < scale[1])
+	{
+		i = 0;
+		while (i < scale[0])
+		{
+			put_pixel(data->win->img, pos[0] + i, pos[1] + j, color);
+			i++;
+		}
 		j++;
 	}
 }

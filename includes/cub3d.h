@@ -8,8 +8,8 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <time.h>
-# include "../minilibx_linux/mlx.h"
-# include "../minilibx_linux/mlx_int.h"
+# include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h"
 #include <limits.h>
 #include <math.h>
 		
@@ -103,7 +103,9 @@ typedef struct s_pl
 	float 	rot_speed;
 	float	mouv_speed;
 	float	parralax_x;
+	int		pl_height;
 }	t_pl;
+
 typedef struct s_room 
 {
     int x, y;   // coin haut gauche
@@ -160,6 +162,7 @@ typedef struct s_mouse
 	int		y_accel;
 	int		mouse_pressed;
 	int		button_hovered;
+	float	sensitivity;
 
 }	t_mouse;
 
@@ -179,21 +182,67 @@ typedef struct s_column_info
 	float tex_pos;  // position actuelle dans la texture
 }	t_column_info;
 
+
+typedef struct s_mob
+{
+	float	mx;
+	float	my;
+	int		hp;
+	int		is_alive;
+	int 	id;
+	int		chase;
+}	t_mob;
+
+typedef enum e_px_type
+{
+    PX_EMPTY = 0,
+    PX_WALL = 1,
+    PX_DOOR = 2,
+    PX_MOB = 3,
+    PX_ITEM = 4
+}   t_px_type;
+
+typedef struct s_px
+{
+    uint32_t    color;
+    int         depth;
+    t_px_type   type;
+}   t_px;
+
+typedef struct s_f_img
+{
+    t_px    *pixels;
+    t_img   img;
+    int     width;
+    int     height;
+}   t_f_img;
+
 typedef struct s_data
 {
 	t_map	*map;
 	t_txt	*txt;
 	t_win	*win;
 	t_img	*ceiling;
+
+	t_f_img	*render_gmp;
 	t_page_id	current_pg;
 	t_button *current_buttons;
 	int		game_on;
 	int		in_game;
+	int		slider_button1;
+	t_mob 	*mob;
+	int		mob_count;
+	t_raycast *raycast_f;
+	int		slider_button2;
+	int		*slider_button;
 	t_mouse	mouse;
 	int		hud_key_pressed;
 	int		pos_y_hud;
+	int timer;
 	int		win_op;
 	int		tilt;
+	int		door_state;
+	float	offset_door_ratio;
 	int		scale;
 	int		fps_cap;
 	float	fov;
@@ -201,6 +250,8 @@ typedef struct s_data
 	int		res_x;
 	t_pl	player;
 	int		shift_is_press;
+	int		shot1;
+	int		shot2;
 	int		w_is_press;
 	int		s_is_press;
 	int		a_is_press;
@@ -242,6 +293,7 @@ void	upscale(t_data *data);
 void mlx_game_loop(t_data *data);
 void get_player_original_pos(t_data  *data);
 void	mouv_player(t_data *data);
+void	draw_rect_fill(t_data *data, int pos[2], int scale[2], int color);
 void resize_window(t_data *data, int resx, int resy);
 char	*ft_strcpy(char *dest, char *src);
 void	init_line_params(t_line *line, float x1, float y1);
@@ -254,6 +306,8 @@ char	**getmap(int fd);
 int	name_checker(char *str);
 char	**ft_realloc(char **map, int size);
 float	normalize_angle(float angle);
+int handle_mouse_release(int button, int x, int y, t_data *data);
+int handle_mouse_press(int button, int x, int y, t_data *data);
 void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling);
 void	free_tab(char **map);
 float get_wall_x_coord(float dist_h, float dist_v,
@@ -277,6 +331,7 @@ void draw_ceiling_to_screen(t_data *data);
 int		name_checker(char *str);
 char **generate_map(int map_w, int map_h);
 // char **generate_map(int level, int *out_map_w, int *out_map_h);
+int is_mob(t_data *data, int mx, int my);
 void clean_map(char **map, int map_w, int map_h);
 void	free_textures_mand(t_txt *textures);
 void	draw_ceiling_img(t_data *data);
@@ -290,15 +345,19 @@ void print_map(char **map);
 void draw_rays(t_data *data, int offset_x, int offset_y);
 void	mouv_player(t_data *data);
 void	draw_game_mode(t_data	*data);
+void draw_mobs(t_data *data);
 char	**allocate_clone(char **map);
 char	**clone_map(char **map);
 void free_map(char **map);
 void	new_map_random(t_data *data);
 void	check_map_ff(t_data *data, t_map *map);
+void	mob_path(t_data *data);
 char **make_map(t_data *data);
 void draw_mini_map(t_data *data, int offset_x, int offset_y);
 void	draw_home_page(t_data *data);
 void	draw_background_mand(t_data *data);
+void cast_horizontal_mob_ray(t_data *data, float *rx, float *ry, float angle);
+void cast_vertical_mob_ray(t_data *data, float *rx, float *ry, float angle);
 int	is_valid_map(t_data *data);
 int	check_arg_and_open(int ac, char **av);
 int	is_wall_hit(t_data *data, int mx, int my);
@@ -306,6 +365,7 @@ void	draw_setting(t_data *data);
 // char **make_map(t_data *data, int level);
 void	create_windows(t_win *win,t_data *data);
 void	cleanup_data(t_data *data);
+float calculate_mob_distance(t_data *data, int i);
 void	init_textures_mand(t_data *data);
 int	flood_fill_element(char **map, int x, int y, char element);
 t_data	*init_data(void);
@@ -348,6 +408,7 @@ void	draw_tile(t_win *win, int x, int y, int color);
 void	draw_player(t_data *data, int offset_x, int offset_y);
 
 void	draw_walls_3d(t_data *data);
+void draw_rays_3d_bonus(t_data *data, int offset_x, int offset_y);
 void	clean_exit_mand(t_data *data);
 void mlx_game_loop(t_data *data);
 //REPARSE
