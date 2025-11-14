@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:17:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 17:25:05 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 17:05:34 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ void	init_data_part1(t_data *data)
 	data->mouse.button_hovered = -1;
 	data->game_on = 0;
 	data->tilt = 0;
+	data->player.is_shooting = 0;
+	data->player.shoot_cd = 0;
+	data->player.shoot_timer = 0;
+	data->player.shoot_cd_timer = 0;
+	data->player.shoot_reload = 0;
+	data->player.shoot_reload_timer = 0;
+	data->player.bullet_count = 0;
 	data->p_is_press = 0;
 	data->player.parralax_x = 0;
 	data->o_is_press = 0;

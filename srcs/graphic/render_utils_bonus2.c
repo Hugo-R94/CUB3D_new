@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:51:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/06 17:16:00 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 16:01:05 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ uint32_t	depth_render(uint32_t color, int ray_length)
 	else
 		return(0x100000);
 }
+
 
 #endif

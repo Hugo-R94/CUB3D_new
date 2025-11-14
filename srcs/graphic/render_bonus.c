@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 11:55:39 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 17:09:47 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 15:45:20 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,42 +228,6 @@ static void	prepare_mob_column(t_column_info *c, int line_h, int line_off, t_img
 	if (line_off + line_h > c->screen_h)
 		c->end_y = c->screen_h - line_off;
 		
-}
-
-void	draw_mob_column(t_data *data, int value[5], t_img *img, int depth)
-{
-	int	screen_y;
-	int	tex_y;
-	unsigned int	pixel_color;
-	if (!img)
-		printf("l'image mob pas trouve\n");
-	int line_h = value[2];      // Hauteur de la colonne
-	int line_off = value[3];    // Offset vertical
-	int tex_x = value[4];       // Position X dans la texture
-	int screen_x = value[0];    // Position X à l'écran
-
-	// Calcul simple : étirer la texture verticalement
-	float scale = (float)img->height / line_h;
-	for (int y = 0; y < line_h; y++)
-	{
-		screen_y = line_off + y;
-		
-		if (screen_y >= 0 && screen_y < 480) // 480 = hauteur écran
-		{
-			// Calcul direct de la position texture
-			tex_y = (int)(y * scale);
-			
-			if (tex_y >= 0 && tex_y < img->height)
-			{
-				pixel_color = get_pixel(img, tex_x, tex_y);
-				
-				// Appliquer l'effet de profondeur
-				pixel_color = depth_render(pixel_color, depth);
-				if (pixel_color != 0x000000)
-					put_pixel(data->win->img, screen_x, screen_y, pixel_color);
-			}
-		}
-	}
 }
 
 static void process_single_ray(t_data *data, int i, float ra)

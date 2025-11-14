@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:48:18 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 16:59:11 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 15:51:14 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void prepare_wall_column(t_column_info *c, int line_h, int line_off, t_im
 }
 
 /* --- Étape 2 : Dessiner la colonne --- */
-void draw_wall_column(t_data *data, int value[5], t_img *img, int depth)
+void draw_wall_column(t_data *data, int value[5], t_img *img, float depth)
 {
 	t_column_info	c;
 	int 		screen_y;
@@ -56,7 +56,7 @@ void draw_wall_column(t_data *data, int value[5], t_img *img, int depth)
 			if (c.tex_y >= img->height)
 				c.tex_y = img->height - 1;
 
-			c.color =get_pixel(img, value[4], c.tex_y), depth;
+			c.color = get_pixel(img, value[4], c.tex_y), depth;
 			if (c.color != 0x000000)
 			{
 				data->render_gmp->pixels[index].color = c.color;

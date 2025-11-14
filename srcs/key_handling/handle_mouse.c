@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 15:25:16 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/07 12:13:11 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 18:10:22 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,88 @@ int	handle_mouse_click(int button, int x, int y, t_data *data)
 	}
 	return (0);
 }
+
+void shooting(t_data *data)
+{
+    t_pl *p = &data->player;
+	static int bullet_had_hitted = 0;
+    if (data->mouse.mouse_pressed)
+    {
+        // Début d'un tir si possible
+       if (!p->is_shooting && p->shoot_cd == 0 && !p->shoot_reload)
+        {
+            p->is_shooting = 1;
+            p->shoot_timer = 0;
+        }
+	}
+        // Tir en cours
+        if (p->is_shooting && p->shoot_timer <= 10)
+        {
+			int cx = data->render_gmp->width / 2;
+			int cy = data->render_gmp->height / 2;
+			int index = cy * data->render_gmp->width + cx;
+            int center = (data->render_gmp->height * data->render_gmp->width) / 2;
+            t_px *px = &data->render_gmp->pixels[index];
+
+            if (px->type == PX_MOB && bullet_had_hitted == 0)
+            {
+                data->mob[px->id].hp -= 1;
+				data->mob[px->id].knockback = 1;
+				printf("mob toucher | mob n%d hp = %d\n",px->id ,data->mob[px->id].hp);
+				bullet_had_hitted = 1;
+				printf("bullet_had_hitted = %d\n",bullet_had_hitted);
+				// printf("mob n%d toucher \n",data->mob[data->render_gmp->pixels[index].id].id);
+            }
+
+            p->shoot_timer++;
+        }
+
+        // Fin du tir
+        if (p->is_shooting && p->shoot_timer > 10)
+        {
+            p->is_shooting = 0;
+            data->player.bullet_count++;
+
+            if ( data->player.bullet_count >= 2)
+            {
+                p->shoot_reload = 1;
+                p->shoot_reload_timer = 0;
+            }
+            else
+            {
+                p->shoot_cd = 1;
+                p->shoot_cd_timer = 0;
+            }
+			bullet_had_hitted = 0;
+			printf("bullet_had_hitted = %d\n",bullet_had_hitted);
+            p->shoot_timer = 0;
+        }
+
+        // Gestion du cooldown
+        if (!p->is_shooting && p->shoot_cd)
+        {
+            p->shoot_cd_timer++;
+            if (p->shoot_cd_timer > 5)
+            {
+                p->shoot_cd_timer = 0;
+                p->shoot_cd = 0;
+            }
+        }
+
+        // Gestion de la recharge
+        if (!p->is_shooting && p->shoot_reload)
+        {
+            p->shoot_reload_timer++;
+            if (p->shoot_reload_timer > 50) // durée recharge
+            {
+                p->shoot_reload_timer = 0;
+                p->shoot_reload = 0;
+                 data->player.bullet_count = 0;
+            }
+        }
+    
+}
+
 
 int handle_mouse_press(int button, int x, int y, t_data *data)
 {

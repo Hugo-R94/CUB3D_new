@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:37:41 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 17:13:56 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 15:48:58 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #ifdef BONUS
 
 /* --- Calcule la distance au sol pour une ligne y donnée --- */
-static double	get_row_distance(int y, double tilt)
+static float	get_row_distance(int y, double tilt)
 {
 	double	p;
 	double	pos_z;
@@ -77,7 +77,7 @@ static void	draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
 	int			tex[2];
 	uint32_t	color;
 	int			index;
-	double		depth;
+	float		depth;
 
 	get_ray_dir(&ray[0], &ray[1], data, x);
 	depth = get_row_distance(y, data->tilt + data->player.pl_height);
@@ -86,7 +86,7 @@ static void	draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
 	get_tex_coords(&tex[0], &tex[1], floor_pos, &floor->img);
 
 	color = get_pixel(&floor->img, tex[0], tex[1]);
-	color = depth_render(color, depth);
+	color = color, depth;
 
 	if (color != 0x000000)
 	{

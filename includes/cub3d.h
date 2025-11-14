@@ -104,6 +104,13 @@ typedef struct s_pl
 	float	mouv_speed;
 	float	parralax_x;
 	int		pl_height;
+	int		is_shooting;
+	int		shoot_timer;
+	int		shoot_cd_timer;
+	int		shoot_cd;
+	int		shoot_reload_timer;
+	int		shoot_reload;
+	int 	bullet_count;
 }	t_pl;
 
 typedef struct s_room 
@@ -191,6 +198,8 @@ typedef struct s_mob
 	int		is_alive;
 	int 	id;
 	int		chase;
+	int		knockback;
+	int		knockback_timer;
 }	t_mob;
 
 typedef enum e_px_type
@@ -205,8 +214,9 @@ typedef enum e_px_type
 typedef struct s_px
 {
     uint32_t    color;
-    int         depth;
+    float         depth;
     t_px_type   type;
+	int			id;
 }   t_px;
 
 typedef struct s_f_img
@@ -293,6 +303,7 @@ void	upscale(t_data *data);
 void mlx_game_loop(t_data *data);
 void get_player_original_pos(t_data  *data);
 void	mouv_player(t_data *data);
+void 	is_player_hit(t_data *data);
 void	draw_rect_fill(t_data *data, int pos[2], int scale[2], int color);
 void resize_window(t_data *data, int resx, int resy);
 char	*ft_strcpy(char *dest, char *src);
@@ -318,13 +329,15 @@ t_txt *find_wall_txt(t_data *data, float dist_h, float dist_v,
 char	get_player_pos(char **map, int *x, int *y);
 void	free_textures(t_data *data, t_txt *textures);
 int get_texture_x(t_img *img, float wall_x);
+void shooting(t_data *data);
 void	copy_texture_to_img(t_img *src, t_img *dst, int pos_x, int pos_y);
 void clear_and_exit(t_data *data);
-void draw_wall_column(t_data *data, int value[5], t_img *img, int depth);
+void   render_depth(t_f_img *image);
 void	draw_floor(t_data *data, int x, int y_start);
 void	reparse(char **map);
 uint32_t	depth_render(uint32_t color, int ray_length);
 void	draw_rect(t_data *data, int pos[2], int scale[2], int color);
+void draw_door_column(t_data *data, int value[5], t_img *img, float depth);
 int		check_invalid(char **map);
 uint32_t	get_pixel(t_img *img, int x, int y);
 void draw_ceiling_to_screen(t_data *data);
@@ -356,6 +369,7 @@ char **make_map(t_data *data);
 void draw_mini_map(t_data *data, int offset_x, int offset_y);
 void	draw_home_page(t_data *data);
 void	draw_background_mand(t_data *data);
+void knockback(t_data *data);
 void cast_horizontal_mob_ray(t_data *data, float *rx, float *ry, float angle);
 void cast_vertical_mob_ray(t_data *data, float *rx, float *ry, float angle);
 int	is_valid_map(t_data *data);
@@ -388,7 +402,7 @@ void draw_map(t_win *win, char **map, int offset_x, int offset_y);
 int	is_too_close(t_room *rooms, int room_count, int x, int y, int w, int h);
 int is_too_close_y(t_room *rooms, int room_count, int y, int h);
 int	is_too_close_x(t_room *rooms, int room_count, int x, int w);
-void draw_door_column(t_data *data, int value[5], t_img *img, int depth);	
+void draw_wall_column(t_data *data, int value[5], t_img *img, float depth);
 void	cast_horizontal_door_ray(t_data *data, float *rx, float *ry, float angle);
 void	put_pixel(t_img *img, int x, int y, uint32_t color);
 void	cast_vertical_door_ray(t_data *data, float *rx, float *ry, float angle);

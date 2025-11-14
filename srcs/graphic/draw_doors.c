@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:20:40 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 16:47:30 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/14 15:45:38 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void prepare_door_column(t_column_info *c, int line_h, int line_off, t_im
         c->end_y = c->screen_h - line_off;
 }
 
-void draw_door_column(t_data *data, int value[5], t_img *img, int depth)
+void draw_door_column(t_data *data, int value[5], t_img *img, float depth)
 {
     t_column_info   c;
     int             screen_y;
@@ -64,7 +64,7 @@ void draw_door_column(t_data *data, int value[5], t_img *img, int depth)
                 
                 if (pixel_color != 0xFF000000)
                 {
-                    c.color = depth_render(pixel_color, depth);
+                    c.color = pixel_color, depth;
                     if (c.color != 0x000000)
                     {
                         data->render_gmp->pixels[index].color = c.color;
