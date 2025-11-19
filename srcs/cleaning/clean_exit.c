@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:24:36 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/10 12:57:45 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 12:16:51 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ void destroy_all_img(t_data *data)
 		mlx_destroy_image(data->win->mlx, data->ceiling);
 		data->ceiling = NULL;
 	}
+	if (data->render_gmp)
+	{
+		mlx_destroy_image(data->win->mlx, data->render_gmp->img);
+		free(data->render_gmp->pixels);
+		free(data->render_gmp);
+	}
 	while (data->txt[i].name)
 	{
 		if (data->txt[i].img.image)
@@ -49,10 +55,12 @@ void destroy_all_img(t_data *data)
 	
 }
 
+
 void	clear_and_exit(t_data *data)
 {
 	if (data)
 	{
+		free(data->mob);
 		destroy_all_img(data);
 		clean_windows(data->win);
 		clean_data(data);

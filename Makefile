@@ -66,6 +66,7 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/raycasting.c \
 				$(GRP_DIR)/raycasting_h.c \
 				$(GRP_DIR)/floor_render_bonus.c \
+				srcs/utils/rand.c \
 				srcs/gameplay/mob.c \
 				srcs/gameplay/collision.c \
 				$(GRP_DIR)/draw_mob.c \

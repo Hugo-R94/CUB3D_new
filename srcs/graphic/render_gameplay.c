@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 16:20:26 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/14 18:13:13 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 18:25:40 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,30 +122,36 @@ void    animate_door(t_data *data)
 	if (data->offset_door_ratio < 0)
 		data->offset_door_ratio = 0;
 }
-void	draw_final_image(t_data *data, int pos_x, int pos_y)
-{
-	t_f_img	*fimg;
-	int		x;
-	int		y;
-	int		index;
 
-	fimg = data->render_gmp;
-	y = 0;
-	while (y < 480)
-	{
-		x = 0;
-		while (x < 640)
-		{
-			index = y * fimg->width + x;
-			// put_pixel(&data->win->img, pos_x + x, pos_y + y,
-				// fimg->pixels[index].color);
-			// printf("depth = %d\n", fimg->pixels[index].depth);
-			put_pixel(data->win->img, pos_x + x, pos_y + y, fimg->pixels[index].color);
-			x++;
-		}
-		y++;
-	}
+
+void draw_final_image(t_data *data, int pos_x, int pos_y)
+{
+    t_f_img *fimg;
+    int x, y;
+    int index;
+    
+    if (!data || !data->render_gmp || !data->render_gmp->pixels)
+        return;
+    
+    fimg = data->render_gmp;
+    
+    // Utiliser directement fimg->height et fimg->width
+    for (y = 0; y < fimg->height; y++)
+    {
+        for (x = 0; x < fimg->width; x++)
+        {
+            index = y * fimg->width + x;
+            
+            // Vérifier que l'on reste dans les limites de la fenêtre
+            if ((pos_x + x) < 0 || (pos_x + x) >= data->win->img->width ||
+                (pos_y + y) < 0 || (pos_y + y) >= data->win->img->height)
+                continue;
+            
+            put_pixel(data->win->img, pos_x + x, pos_y + y, fimg->pixels[index].color);
+        }
+    }
 }
+
 void clear_render_gmp(t_f_img *render)
 {
 	int total = render->width * render->height;
@@ -293,16 +299,19 @@ void	render_gameplay_full(t_data *data)
 	render_gameplay(data);
 	// render_depth(data->render_gmp);
 	// pp_depth(data->render_gmp);
-	render_px_type_mob(data->render_gmp);
+	// render_px_type_mob(data->render_gmp);
 	int cx = data->render_gmp->width / 2;
 	int cy = data->render_gmp->height / 2;
 	int index = cy * data->render_gmp->width + cx;
 	// data->render_gmp->pixels[data->render_gmp->height * data->render_gmp->width / 2].color = 0xFF0000;
 	// if (data->render_gmp->pixels[index].type == PX_MOB)
 	// 	printf("viseur sur un mob\n");
+	// printf("h = %d | w = %d \n", data->render_gmp->height, data->render_gmp->width);
 	shooting(data);
 	knockback(data);
 	draw_final_image(data,0,0);
+	// draw_rect(data,(int []){0, 0}, (int []){640, 125},0xff0000);
+	// draw_rect(data,(int []){0, 125}, (int []){480, 125},0x00ff00);
 	draw_hand_pl(data);
 	is_player_hit(data);
 	render_hud_still(data);

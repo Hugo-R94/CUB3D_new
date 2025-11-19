@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:44:02 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/14 18:03:16 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 19:03:22 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,40 +59,48 @@ static int get_tex_coord(int screen, int start, float ratio, int max)
 
 static void draw_mob_column(t_data *data, t_txt *tex, int x, int *bounds, float depth, int id)
 {
-	int y;
-	int tex_x;
-	int tex_y;
-	int color;
-	int index;
-	tex_x = get_tex_coord(x, bounds[2], 250.0 / bounds[1], 250);
-	y = bounds[4] - 1;
-	while (++y < bounds[5])
-	{
-		if (y < 0 || y >= data->render_gmp->height)
-			continue;
-
-		tex_y = get_tex_coord(y, bounds[4], 250.0 / bounds[0], 250);
-		color = get_pixel(&tex->img, tex_x, tex_y);
-
-		if (color != 0x000000)
-		{
-			index = y * data->render_gmp->width + x;
-			if (index >= 0 && index < data->render_gmp->width * data->render_gmp->height)
-			{
-				if (data->render_gmp->pixels[index].type == PX_EMPTY 
-					|| depth < data->render_gmp->pixels[index].depth)
-				{
-					data->render_gmp->pixels[index].color = color;
-					data->render_gmp->pixels[index].depth = depth;
-					data->render_gmp->pixels[index].type = PX_MOB;
-					data->render_gmp->pixels[index].id = id;
-				}
-			}
-		}
-	}
+    int y;
+    int tex_x;
+    int tex_y;
+    int color;
+    int index;
+    float tex_ratio_x;
+    float tex_ratio_y;
+    
+    // Calculer les ratios texture/écran
+    tex_ratio_x = (float)tex->img.width / (float)bounds[1];   // largeur texture / largeur écran
+    tex_ratio_y = (float)tex->img.height / (float)bounds[0];  // hauteur texture / hauteur écran
+    
+    tex_x = get_tex_coord(x, bounds[2], tex_ratio_x, tex->img.width);
+    
+    y = bounds[4] - 1;
+    while (++y < bounds[5])
+    {
+        if (y < 0 || y >= data->render_gmp->height)
+            continue;
+        
+        tex_y = get_tex_coord(y, bounds[4], tex_ratio_y, tex->img.height);
+        color = get_pixel(&tex->img, tex_x, tex_y);
+        
+        if (color != 0x000000)
+        {
+            index = y * data->render_gmp->width + x;
+            if (index >= 0 && index < data->render_gmp->width * data->render_gmp->height)
+            {
+                if (data->render_gmp->pixels[index].type == PX_EMPTY 
+                    || depth < data->render_gmp->pixels[index].depth)
+                {
+                    data->render_gmp->pixels[index].color = color;
+                    data->render_gmp->pixels[index].depth = depth;
+                    data->render_gmp->pixels[index].type = PX_MOB;
+                    data->render_gmp->pixels[index].id = id;
+                }
+            }
+        }
+    }
 }
 
-static void draw_mob_sprite(t_data *data, t_txt *tex, int *bounds, float depth, int id)
+static void 	draw_mob_sprite(t_data *data, t_txt *tex, int *bounds, float depth, int id)
 {
 	int x;
 
@@ -122,12 +130,12 @@ void draw_single_mob(t_data *data, int i, char *txt_name, float height_scale)
 		return;
 
 	// Calcul des dimensions
-	bounds[1] = (int)(480 / distance);  // Largeur
-	bounds[0] = (int)(480 / distance * height_scale);  // Hauteur réduite
+	bounds[1] = (int)(data->render_gmp->height / distance * height_scale);  // Largeur
+	bounds[0] = (int)(data->render_gmp->height / distance * height_scale);  // Hauteur réduite
 	
 	// Calcul de la position verticale
-	full_height = (int)(480 / distance);  // Hauteur complète (pour référence)
-	center_y = (480 / 2) + data->tilt + data->player.pl_height;
+	full_height = (int)(data->render_gmp->height / distance);  // Hauteur complète (pour référence)
+	center_y = (data->render_gmp->height / 2) + data->tilt + data->player.pl_height;
 	
 	// Position du bas du sprite (comme s'il avait la hauteur complète)
 	bounds[5] = center_y + (full_height / 2);
@@ -164,10 +172,10 @@ void draw_mobs(t_data *data)
 
 	i = 0;
 	check_mob_state(data);
-	while (i < 4 && data->mob[i].mx != 0)
+	while (i < data->mob_count && data->mob[i].mx != 0)
 	{
 		if (data->mob[i].is_alive)
-			draw_single_mob(data, i,"mob", 0.7f);
+			draw_single_mob(data, i,data->mob[i].sprite, data->mob[i].size);
 		i++;
 	}
 }

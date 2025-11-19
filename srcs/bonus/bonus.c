@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 10:47:25 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 14:32:29 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 18:57:26 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void    init_mob(t_data *data)
        x = 0;
        while (data->map->map[y][x])
        {
-           if (data->map->map[y][x] == 'M')
+           if (data->map->map[y][x] == 'M' || data->map->map[y][x] == 'B')
                mob_count++;
            x++;
        }
@@ -44,13 +44,27 @@ void    init_mob(t_data *data)
        x = 0;
        while (data->map->map[y][x])
        {
-           if (data->map->map[y][x] == 'M')
-           {
-               data->mob[i].mx = (float)x;
-               data->mob[i].my = (float)y;
+            if (data->map->map[y][x] == 'M' )
+            {
+               data->mob[i].mx = (float)x + 0.5;
+               data->mob[i].my = (float)y + 0.5;
                data->mob[i].hp = 2;
                data->mob[i].is_alive = 1;
+               data->mob[i].sprite = "mob";
+               data->mob[i].size = 0.7;
                data->mob[i].id = i;
+               data->mob[i].chase = 0;
+               i++;
+            }
+            if (data->map->map[y][x] == 'B')
+            {
+               data->mob[i].mx = (float)x + 0.5;
+               data->mob[i].my = (float)y + 0.5;
+               data->mob[i].hp = 5;
+               data->mob[i].is_alive = 1;
+               data->mob[i].id = i;
+               data->mob[i].sprite = "bos";
+               data->mob[i].size = 2.5;
                data->mob[i].chase = 0;
                i++;
            }

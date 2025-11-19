@@ -200,6 +200,8 @@ typedef struct s_mob
 	int		chase;
 	int		knockback;
 	int		knockback_timer;
+	char	*sprite;
+	float	size;
 }	t_mob;
 
 typedef enum e_px_type
@@ -222,7 +224,7 @@ typedef struct s_px
 typedef struct s_f_img
 {
     t_px    *pixels;
-    t_img   img;
+    t_img   *img;
     int     width;
     int     height;
 }   t_f_img;

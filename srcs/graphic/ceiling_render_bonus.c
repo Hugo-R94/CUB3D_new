@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 13:43:49 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 17:14:01 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 12:01:13 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,37 +96,40 @@ void    draw_ceiling_img(t_data *data)
 }
 
 
-/* --- Ancien draw_ceiling, version "render_gmp" --- */
-void	draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling)
+void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling)
 {
-	int			y;
-	int			tex_x;
-	int			tex_y;
-	uint32_t	color;
-	int			index;
+    int y;
+    int tex_x, tex_y;
+    uint32_t color;
+    int index;
 
-	if (!ceiling || !ceiling->data)
-		return;
-	y = 0;
-	while (y < y_end)
-	{
-		tex_x = x % ceiling->width;
-		tex_y = y % ceiling->height;
-		if (tex_x < 0)
-			tex_x += ceiling->width;
-		if (tex_y < 0)
-			tex_y += ceiling->height;
-		color = get_pixel(ceiling, tex_x, tex_y);
-		if (color != 0x000000)
-		{
-			index = y * data->render_gmp->width + x;
-			// profondeur négative (infini haut) pour éviter d’écraser murs/plancher
-			data->render_gmp->pixels[index].color = color;
-			data->render_gmp->pixels[index].depth = -1;
-			data->render_gmp->pixels[index].type = PX_EMPTY;
-		}
-		y++;
-	}
+    if (!ceiling || !ceiling->data)
+        return;
+
+    // clamp x pour éviter out-of-bounds
+    if (x < 0 || x >= data->render_gmp->width)
+        return;
+
+    y = 0;
+    while (y < y_end && y < data->render_gmp->height) // clamp y ici
+    {
+        tex_x = x % ceiling->width;
+        tex_y = y % ceiling->height;
+        if (tex_x < 0) tex_x += ceiling->width;
+        if (tex_y < 0) tex_y += ceiling->height;
+
+        color = get_pixel(ceiling, tex_x, tex_y);
+
+        if (color != 0x000000)
+        {
+            index = y * data->render_gmp->width + x;
+            data->render_gmp->pixels[index].color = color;
+            data->render_gmp->pixels[index].depth = -1;
+            data->render_gmp->pixels[index].type = PX_EMPTY;
+        }
+        y++;
+    }
 }
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:37:41 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/14 15:48:58 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 12:03:33 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,35 +69,39 @@ static void	get_tex_coords(int *tex_x, int *tex_y, double *floor, t_img *img)
 	*tex_y = (int)(img->height * (floor[1] - cell_y)) & (img->height - 1);
 }
 
-/* --- Dessine un pixel du sol dans le framebuffer logique (render_gmp) --- */
-static void	draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
+static void draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
 {
-	double		ray[3];
-	double		floor_pos[2];
-	int			tex[2];
-	uint32_t	color;
-	int			index;
-	float		depth;
+    double ray[3];
+    double floor_pos[2];
+    int tex[2];
+    uint32_t color;
+    int index;
+    float depth;
 
-	get_ray_dir(&ray[0], &ray[1], data, x);
-	depth = get_row_distance(y, data->tilt + data->player.pl_height);
-	ray[2] = depth;
-	get_floor_pos(&floor_pos[0], &floor_pos[1], data, ray);
-	get_tex_coords(&tex[0], &tex[1], floor_pos, &floor->img);
+    // Vérifier que x et y sont valides
+    if (x < 0 || x >= data->render_gmp->width)
+        return;
+    if (y < 0 || y >= data->render_gmp->height)
+        return;
 
-	color = get_pixel(&floor->img, tex[0], tex[1]);
-	color = color, depth;
+    get_ray_dir(&ray[0], &ray[1], data, x);
+    depth = get_row_distance(y, data->tilt + data->player.pl_height);
+    ray[2] = depth;
+    get_floor_pos(&floor_pos[0], &floor_pos[1], data, ray);
+    get_tex_coords(&tex[0], &tex[1], floor_pos, &floor->img);
 
-	if (color != 0x000000)
-	{
-		index = y * data->render_gmp->width + x;
+    color = get_pixel(&floor->img, tex[0], tex[1]);
 
-		// Vérifie si le pixel actuel est plus proche que celui déjà stocké
-		data->render_gmp->pixels[index].color = color;
-		data->render_gmp->pixels[index].depth = depth;
-		data->render_gmp->pixels[index].type = PX_EMPTY; // PX_FLOOR si tu veux un type dédié
-	}
+    if (color != 0x000000)
+    {
+        index = y * data->render_gmp->width + x;
+
+        data->render_gmp->pixels[index].color = color;
+        data->render_gmp->pixels[index].depth = depth;
+        data->render_gmp->pixels[index].type = PX_EMPTY;
+    }
 }
+
 
 /* --- Fonction principale : dessine le sol pour la colonne x --- */
 void	draw_floor(t_data *data, int x, int y_start)

@@ -6,14 +6,13 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:48:18 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/14 15:51:14 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 18:22:26 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
 #ifdef BONUS
-
 
 /* --- Étape 1 : Préparer les données de colonne --- */
 static void prepare_wall_column(t_column_info *c, int line_h, int line_off, t_img *img)
@@ -68,6 +67,5 @@ void draw_wall_column(t_data *data, int value[5], t_img *img, float depth)
 		c.tex_pos += c.step;
 	}
 }
-
 
 #endif

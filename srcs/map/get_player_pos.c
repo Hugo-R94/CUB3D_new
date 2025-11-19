@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_player_pos.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 17:45:58 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/17 17:46:06 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/19 18:43:03 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void get_player_original_pos(t_data  *data)
 			if (data->map->map[y][x] == 'S' || data->map->map[y][x] == 'N'
 				|| data->map->map[y][x] == 'O' || data->map->map[y][x] == 'E')
 				{
-					data->player.px = x;
-					data->player.py = y;
+					data->player.px = x + 0.5;
+					data->player.py = y + 0.5;
 					get_player_original_or(data, data->map->map[y][x]);	
 				}
 				x++;

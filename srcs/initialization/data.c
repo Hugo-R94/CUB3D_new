@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:17:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/14 17:05:34 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 18:08:38 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	init_data_part1(t_data *data)
 	data->player.mouv_speed = (data->res_x * 0.00003125) * 5;
 	data->win_op = 1;
 	data->timer = 0;
+
 	// data->slider_button[0] = 0;
 	data->player.pl_height = 0;
 	data->offset_door_ratio = 0.0f;
@@ -86,8 +87,11 @@ t_data	*init_data(void)
 	init_data_part1(data);
 	if (!data->ceiling)
 		perror("mlx_new_image ceiling");
-	data->render_gmp = mlx_new_image(data->win->mlx, data->res_x, data->res_y);
+	data->render_gmp = calloc(1,sizeof(t_f_img));
+	data->render_gmp->img = mlx_new_image(data->win->mlx, data->res_x, data->res_y);
 	data->render_gmp->pixels = calloc(data->res_x * data->res_y,sizeof(t_px));
+	data->render_gmp->height = data->res_y;
+	data->render_gmp->width = data->res_x;
 	data->txt = init_textures(data);
 	if (!data->txt)
 		perror("calloc txt");

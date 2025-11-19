@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 12:51:39 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/13 17:03:15 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/19 18:56:04 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ const char *texture_names[] =
 	"black",
 	"wall_wood",
 	"slider_base",
+	"bos",
 	"slider_button",
 	"wall",
 	"button",

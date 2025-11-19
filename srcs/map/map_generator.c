@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_generator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 12:26:31 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/30 17:10:15 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/19 18:53:45 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,15 @@ t_room create_room(char **map, int x, int y, int w, int h, int map_w, int map_h)
         int ey = y + 1 + rand() % (h - 2);
         if (map[ey][ex] == '0')
         {
-            map[ey][ex] = 'M';
+            if (placed %2 == 0)
+                map[ey][ex] = 'M';
+            else 
+                map[ey][ex] = 'B';
             placed++;
         }
     }
 
-    return room;
+    return (room);
 }
 
 
