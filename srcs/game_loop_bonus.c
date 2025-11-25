@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 11:34:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 12:17:42 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 14:25:23 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,10 @@ static void	render_home_pages(t_data *data)
 		draw_game_mode(data);
 	else if (data->current_pg == SETT_PG)
 		draw_setting(data);
+	else if (data->current_pg == DEATH_PG)
+		draw_death_menu(data);
+	else if (data->current_pg == WIN_PG)
+		draw_win_screen(data);
 }
 
 static void	render_pause(t_data *data)
@@ -189,7 +193,7 @@ static void	setup_hooks(t_data *data)
 	mlx_loop_hook(data->win->mlx, render_frame, data);
 	mlx_hook(data->win->win, 2, 1L << 0, handle_key, data);
 	mlx_hook(data->win->win, 17, 0, handle_close, data);
-	mlx_hook(data->win->win, 4, 1L<<2, handle_mouse_press, data);
+	// mlx_hook(data->win->win, 4, 1L<<2, handle_mouse_press, data);
 	mlx_hook(data->win->win, 5, 1L<<3, handle_mouse_release, data);
 	mlx_mouse_hook(data->win->win, handle_mouse_click, data);
 	mlx_hook(data->win->win, 2, 1L << 0, handle_key_press, data);

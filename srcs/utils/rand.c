@@ -6,58 +6,45 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 10:14:45 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/19 11:33:24 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 14:39:09 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
-#include <stdio.h>
-#include <sys/time.h>
+#include <stdlib.h>
+#include <time.h>
 
+void init_rand(void)
+{
+    srand(time(NULL));
+}
 
 int get_rand_d(int min, int max)
 {
-	struct timeval time;
-	long rand;
-	int range;
-
-	range = max - min + 1;
-	if (range <= 0)
-		return (-1);
-	gettimeofday(&time, NULL);
-	rand = (time.tv_usec + 83);
-	return (min + (rand % range));
+    return (min + rand() % (max - min + 1));
 }
 
 float get_rand_f(float min, float max)
 {
-    struct timeval	time;
-    float			range;
-	float			rand;
+    float r ;
 
-    range = max - min;
-    if (range <= 0)
-        return (-1);
-    gettimeofday(&time, NULL);
-    rand = (float)(time.tv_usec % 1000000) / 1000000.0f;
-    return (min + rand * range);
+	r = (float)rand() / (float)RAND_MAX;
+    return (min + r * (max - min));
 }
 
-char	get_rand_c(char *charset)
+
+char get_rand_c(char *charset)
 {
-	int		range;
-	struct	timeval time;
-	int		rand;	
+    int range;
 
 	range = 0;
-	while (charset[range])
-		range++;
-	if(range <= 0)
-		return ('\0');
-	gettimeofday(&time, NULL);
-	rand = (time.tv_usec) % range;
-	return(charset[rand]);
+    while (charset[range])
+        range++;
+    if (range <= 0)
+        return '\0';
+    return (charset[rand() % range]);
 }
+
 
 // int main(void)
 // {

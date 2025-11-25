@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:13:14 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/12 12:36:50 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:25:02 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	cast_horizontal_ray(t_data *data, float *rx, float *ry, float angle)
 
 	init_horizontal_ray(data, &ray, angle);
 	dof = 0;
-	while (dof < 15)
+	while (dof < 100)
 	{
 		if (is_wall_hit(data, (int)ray.rx, (int)ray.ry))
 			break ;
@@ -76,6 +76,8 @@ void	cast_horizontal_ray(t_data *data, float *rx, float *ry, float angle)
 //     *rx = ray.rx;
 //     *ry = ray.ry;
 // }
+#ifdef BONUS 
+
 void cast_horizontal_door_ray(t_data *data, float *rx, float *ry, float angle)
 {
     t_raycast   ray;
@@ -85,7 +87,7 @@ void cast_horizontal_door_ray(t_data *data, float *rx, float *ry, float angle)
     
     init_horizontal_ray(data, &ray, angle);
     dof = 0;
-    while (dof < 15)
+    while (dof < 25)
     {
         map_x = (int)ray.rx;
         map_y = (int)ray.ry;
@@ -138,3 +140,4 @@ void cast_horizontal_mob_ray(t_data *data, float *rx, float *ry, float angle)
     *rx = ray.rx;
     *ry = ray.ry;
 }
+#endif 

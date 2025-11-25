@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mandatory.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 11:01:42 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/03 11:17:28 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/24 15:08:27 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ static float	get_wall_x_coord(float dist_h, float dist_v,
 ** Convertit wall_x (0.0-1.0) en coordonnée pixel de texture.
 ** Multiplie par la largeur de l'image et clippe aux bords.
 */
-static int	get_texture_x(t_img *img, float wall_x)
+int	get_texture_x(t_img *img, float wall_x)
 {
 	int	tex_x;
 

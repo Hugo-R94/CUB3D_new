@@ -6,15 +6,17 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 12:51:39 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 18:56:04 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/25 13:41:05 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 #include <string.h>
+
 #ifdef BONUS
-const char *texture_names[] = 
-{
+
+const char	*g_texture_names[]
+	= {
 	"HUD_placeholder",
 	// "mettre_nom_txt_ici",
 	"Home_bg",
@@ -24,6 +26,7 @@ const char *texture_names[] =
 	"black",
 	"wall_wood",
 	"slider_base",
+	"exit",
 	"bos",
 	"slider_button",
 	"wall",
@@ -55,7 +58,7 @@ const char *texture_names[] =
 	"skybox",
 	"floor",
 	// Lettres majuscules
-	"A", 
+	"A",
 	"B",
 	"C",
 	"D",
@@ -64,7 +67,7 @@ const char *texture_names[] =
 	"G",
 	"H",
 	"I",
-	"J",     
+	"J",
 	"K",
 	"L",
 	"M",
@@ -74,7 +77,7 @@ const char *texture_names[] =
 	"Q",
 	"R",
 	"S",
-	"T",       
+	"T",
 	"U",
 	"V",
 	"W",
@@ -95,15 +98,41 @@ const char *texture_names[] =
 	NULL
 };
 
+static void	free_textures_partial(t_txt *textures, int count)
+{
+	int	k;
+
+	k = -1;
+	while (++k < count)
+	{
+		free(textures[k].name);
+		free(textures[k].path);
+	}
+	free(textures);
+}
+
+static int	init_texture_name(t_txt *textures, int j)
+{
+	textures[j].name = ft_strdup(g_texture_names[j]);
+	if (!textures[j].name)
+		return (0);
+	textures[j].path = ft_sprintf("txt/%s.xpm", textures[j].name);
+	if (!textures[j].path)
+	{
+		free(textures[j].name);
+		return (0);
+	}
+	return (1);
+}
+
 t_txt	*init_paths(void)
 {
 	int		i;
 	int		j;
-	int		k;
 	t_txt	*textures;
 
 	i = 0;
-	while (texture_names[i])
+	while (g_texture_names[i])
 		i++;
 	textures = ft_calloc(i + 1, sizeof(t_txt));
 	if (!textures)
@@ -111,25 +140,9 @@ t_txt	*init_paths(void)
 	j = -1;
 	while (++j < i)
 	{
-		textures[j].name = ft_strdup(texture_names[j]);
-		if (!textures[j].name)
+		if (!init_texture_name(textures, j))
 		{
-			k = -1;
-			while (++k < j)
-			{
-				free(textures[k].name);
-				free(textures[k].path);
-			}
-			free(textures);
-			return (NULL);
-		}
-		textures[j].path = ft_sprintf("txt/%s.xpm", textures[j].name);
-		if (!textures[j].path)
-		{
-			k = -1;
-			while (++k <= j)
-				free(textures[k].name);
-			free(textures);
+			free_textures_partial(textures, j);
 			return (NULL);
 		}
 	}
@@ -138,11 +151,26 @@ t_txt	*init_paths(void)
 	return (textures);
 }
 
+static int	load_xpm_image(t_data *data, t_txt *txt)
+{
+	printf("%stxt name = %s | txt path = %s\n%s",
+		GRN, txt->name, txt->path, RESET);
+	txt->img.image = mlx_xpm_file_to_image(data->win->mlx,
+			txt->path, &txt->img.width, &txt->img.height);
+	if (!txt->img.image)
+	{
+		fprintf(stderr, "Erreur: impossible de charger %s\n", txt->path);
+		return (0);
+	}
+	txt->img.data = mlx_get_data_addr(txt->img.image,
+			&txt->img.bpp, &txt->img.size_line, &txt->img.format);
+	return (1);
+}
+
 t_txt	*init_textures(t_data *data)
 {
 	t_txt	*textures;
 	int		i;
-	int		k;
 
 	if (!data || !data->win || !data->win->mlx)
 	{
@@ -155,48 +183,14 @@ t_txt	*init_textures(t_data *data)
 	i = 0;
 	while (textures[i].name)
 	{
-		printf("%stxt name = %s | txt path = %s\n%s",
-			GRN, textures[i].name, textures[i].path, RESET);
-		textures[i].img.image = mlx_xpm_file_to_image(
-				data->win->mlx,
-				textures[i].path,
-				&textures[i].img.width,
-				&textures[i].img.height
-				);
-		if (!textures[i].img.image)
+		if (!load_xpm_image(data, &textures[i]))
 		{
-			fprintf(stderr, "Erreur: impossible de charger %s\n",
-				textures[i].path);
-			k = -1;
-			while (textures[++k].name)
-			{
-				free(textures[k].name);
-				free(textures[k].path);
-			}
-			free(textures);
+			free_textures_partial(textures, i + 1);
 			return (NULL);
 		}
-		textures[i].img.data = mlx_get_data_addr(
-				textures[i].img.image,
-				&textures[i].img.bpp,
-				&textures[i].img.size_line,
-				&textures[i].img.format
-				);
 		i++;
 	}
 	return (textures);
 }
 
-void	print_texture_set(t_txt *txt)
-{
-	int	i;
-
-	i = 0;
-	while (txt[i].name)
-	{
-		printf("texture[%i].name = %s | texture[%i].path = %s\n",
-			i, txt[i].name, i, txt[i].path);
-		i++;
-	}
-}
 #endif

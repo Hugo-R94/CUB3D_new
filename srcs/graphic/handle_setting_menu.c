@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 11:43:03 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/10 13:39:00 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/20 14:34:00 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,13 @@ void	put_slider(t_data *data, int x, int y, int button_id, int slider_id)
 	setting_menu_button[button_id].y = y - 2;
 	setting_menu_button[button_id].x = x + 135;
 	draw_to_img(data, "slider_button", setting_menu_button[button_id].x, setting_menu_button[button_id].y);
-	if (data->mouse.mouse_pressed && data->slider_button[slider_id])
+	if (data->mouse.mouse_button_lc && data->slider_button[slider_id])
 		setting_menu_button[button_id].x = data->mouse.mouse_x;
 	if (setting_menu_button[button_id].x < x + 10)
 		setting_menu_button[button_id].x = x + 10;
 	if (setting_menu_button[button_id].x > x + 270)
 		setting_menu_button[button_id].x = x + 270;
-	if (data->mouse.mouse_pressed == 0)
+	if (data->mouse.mouse_button_lc == 0)
 		data->slider_button[slider_id] = 0;
 }
 
@@ -135,13 +135,13 @@ void	choose_fov(t_data *data)
 	draw_rect_fill(data, (int[]){246, 286}, (int[]){setting_menu_button[5].x - 240, 15}, 0xFF0000);
 	draw_to_img(data, "slider_base", 245,285);
 	draw_to_img(data, "slider_button", setting_menu_button[5].x, setting_menu_button[5].y);
-	if (data->mouse.mouse_pressed && data->slider_button1)
+	if (data->mouse.mouse_button_lc && data->slider_button1)
 		setting_menu_button[5].x = data->mouse.mouse_x;
 	if (setting_menu_button[5].x < 250)
 		setting_menu_button[5].x = 250;
 	if (setting_menu_button[5].x > 520)
 		setting_menu_button[5].x = 520;
-	if (data->mouse.mouse_pressed == 0)
+	if (data->mouse.mouse_button_lc == 0)
 		data->slider_button1 = 0;
 	data->fov =(M_PI / 3) * ((float)setting_menu_button[5].x /333);
 	fov = ft_itoa(data->fov / 0.01415 + 5);
@@ -155,14 +155,14 @@ void	choose_sensi(t_data *data)
 	put_string_to_img(data, (int []){90, 340}, 0xC73114, "SENSI");
 	draw_rect_fill(data, (int[]){246, 345}, (int[]){setting_menu_button[6].x - 240, 15}, 0xFF0000);
 	draw_to_img(data, "slider_base", 245,345);
-	draw_to_img(data, "skull", setting_menu_button[6].x, setting_menu_button[6].y);
-	if (data->mouse.mouse_pressed && data->slider_button2)
+	draw_to_img(data, "slider_button", setting_menu_button[6].x, setting_menu_button[6].y);
+	if (data->mouse.mouse_button_lc && data->slider_button2)
 		setting_menu_button[6].x = data->mouse.mouse_x;
 	if (setting_menu_button[6].x < 250)
 		setting_menu_button[6].x = 250;
 	if (setting_menu_button[6].x > 520)
 		setting_menu_button[6].x = 520;
-	if (data->mouse.mouse_pressed == 0)
+	if (data->mouse.mouse_button_lc == 0)
 		data->slider_button2 = 0;
 	data->mouse.sensitivity = 0.000006 * ((float)setting_menu_button[6].x / 2.7 - 92.59) + 0.0002;
 	sensi = ft_itoa((float)setting_menu_button[6].x / 2.7 - 92.59);

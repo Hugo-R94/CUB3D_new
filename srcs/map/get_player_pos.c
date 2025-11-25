@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 17:45:58 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 18:43:03 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/21 16:58:00 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,27 @@ void	get_player_original_or(t_data *data, char player)
 }
 
 
-void get_player_original_pos(t_data  *data)
+void get_player_original_pos(t_data *data)
 {
-	int	x;
-	int	y;
-	
-	y = 0;
-	while (data->map->map[y])
-	{
-		x = 0;
-		while (data->map->map[y][x])
-		{
-			if (data->map->map[y][x] == 'S' || data->map->map[y][x] == 'N'
-				|| data->map->map[y][x] == 'O' || data->map->map[y][x] == 'E')
-				{
-					data->player.px = x + 0.5;
-					data->player.py = y + 0.5;
-					get_player_original_or(data, data->map->map[y][x]);	
-				}
-				x++;
-		}
-		y++;
-	}
+    int x;
+    int y;
+
+    y = 0;
+    while (data->map->map[y])
+    {
+        x = 0;
+        while (data->map->map[y][x])
+        {
+            if (data->map->map[y][x] == 'S' || data->map->map[y][x] == 'N'
+                || data->map->map[y][x] == 'O' || data->map->map[y][x] == 'E')
+            {
+                data->player.px = x + 0.5;
+                data->player.py = y + 0.5;
+                get_player_original_or(data, data->map->map[y][x]);
+                return;  // AJOUTE ÇA !
+            }
+            x++;
+        }
+        y++;
+    }
 }

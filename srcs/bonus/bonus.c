@@ -6,81 +6,13 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 10:47:25 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 18:57:26 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 16:32:28 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
 #ifdef BONUS
-void    init_mob(t_data *data)
-{
-   int mob_count;
-   int y;
-   int x;
-   int i;
-
-
-   if (data->mob)
-       free(data->mob);
-   mob_count = 0;
-   y = 0;
-   while (data->map->map[y])
-   {
-       x = 0;
-       while (data->map->map[y][x])
-       {
-           if (data->map->map[y][x] == 'M' || data->map->map[y][x] == 'B')
-               mob_count++;
-           x++;
-       }
-       y++;
-   }
-   data->mob = calloc(mob_count, sizeof(t_mob));
-   y = 0;
-   i = 0;
-   while (data->map->map[y])
-   {
-       x = 0;
-       while (data->map->map[y][x])
-       {
-            if (data->map->map[y][x] == 'M' )
-            {
-               data->mob[i].mx = (float)x + 0.5;
-               data->mob[i].my = (float)y + 0.5;
-               data->mob[i].hp = 2;
-               data->mob[i].is_alive = 1;
-               data->mob[i].sprite = "mob";
-               data->mob[i].size = 0.7;
-               data->mob[i].id = i;
-               data->mob[i].chase = 0;
-               i++;
-            }
-            if (data->map->map[y][x] == 'B')
-            {
-               data->mob[i].mx = (float)x + 0.5;
-               data->mob[i].my = (float)y + 0.5;
-               data->mob[i].hp = 5;
-               data->mob[i].is_alive = 1;
-               data->mob[i].id = i;
-               data->mob[i].sprite = "bos";
-               data->mob[i].size = 2.5;
-               data->mob[i].chase = 0;
-               i++;
-           }
-           x++;
-       }
-       y++;
-   }
-   data->mob_count = i;
-   i = 0;
-   while (i < mob_count)
-   {
-       printf("mob n%d mx = %f | my = %f | hp = %d\n",i, data->mob[i].mx,data->mob[i].my,data->mob[i].hp);
-       i++;
-   }
-  
-}
 
 void	new_map_random(t_data *data)
 {
@@ -100,9 +32,9 @@ void	new_map_random(t_data *data)
 		data->map->height++;
 	}
 	get_player_original_pos(data);
+	get_exit_pos(data);
 	print_map(data->map->map);
 	init_mob(data);
-	printf("fin\n");
 }
 
 int	main(void)
@@ -110,7 +42,6 @@ int	main(void)
 	t_data	*data;
 
 	data = init_data();
-	// printf("px = %f | py = %f\n", data->player.px, data->player.py);
 	mlx_game_loop(data);
 	return (0);
 }

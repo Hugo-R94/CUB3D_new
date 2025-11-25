@@ -6,11 +6,13 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:20:40 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 12:18:57 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:04:38 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+#ifdef BONUS 
 
 /* --- Étape 1 : Préparer les données de colonne pour porte --- */
 static void prepare_door_column(t_column_info *c, int line_h, int line_off, t_img *img)
@@ -52,20 +54,16 @@ void draw_door_column(t_data *data, int value[5], t_img *img, float depth)
     while (++c.y < c.end_y)
     {
         screen_y = value[3] + c.y + y_offset;
-
-        // ✅ Clamp screen_y et value[0] pour rester dans render_gmp
         if (screen_y < 0 || screen_y >= data->render_gmp->height)
             continue;
         if (value[0] < 0 || value[0] >= data->render_gmp->width)
             continue;
-
         c.tex_y = (int)c.tex_pos;
         if (c.tex_y < 0 || c.tex_y >= img->height)
         {
             c.tex_pos += c.step;
             continue;
         }
-
         index = value[0] + screen_y * data->render_gmp->width;
         pixel_color = get_pixel(img, value[4], c.tex_y);
 
@@ -75,7 +73,8 @@ void draw_door_column(t_data *data, int value[5], t_img *img, float depth)
             data->render_gmp->pixels[index].depth = depth;
             data->render_gmp->pixels[index].type = PX_WALL;
         }
-
         c.tex_pos += c.step;
     }
 }
+
+#endif

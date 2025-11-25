@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:53:14 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/07 16:39:17 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:22:02 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	draw_ray_line(t_data *data, t_raycast *rc, int offset_x, int offset_y)
 	y[1] = offset_y + rc->ry_final * TILE_SIZE;
 	draw_line(data->win, x, y, 0x00FF00);
 }
+#ifdef BONUS 
+
 void draw_rays_3d(t_data *data, int offset_x, int offset_y)
 {
     int i;
@@ -86,13 +88,8 @@ void draw_rays_3d(t_data *data, int offset_x, int offset_y)
     {
         x[0] = offset_x + data->player.px * TILE_SIZE;
         y[0] = offset_y + data->player.py * TILE_SIZE;
-	printf("ray[%d] = (%f, %f)\n", i, data->raycast_f[i].rx_final, data->raycast_f[i].ry_final);
-
-        //Vérifie si tes coordonnées sont déjà en pixels ou pas
-        //Si tu vois rien, enlève les * TILE_SIZE
         x[1] = offset_x + data->raycast_f[i].rx_final * TILE_SIZE;
         y[1] = offset_y + data->raycast_f[i].ry_final * TILE_SIZE;
-
         draw_line(data->win, x, y, 0x00FF00);
         i++;
     }
@@ -117,9 +114,11 @@ void draw_rays_3d_bonus(t_data *data, int offset_x, int offset_y)
     if (!is_valid_map(data) || !data->raycast_f)
         return;
     i = 0;
-    while (i < data->res_x) /* ou data->num_rays, évite le 640 codé en dur */
+    while (i < data->res_x)
     {
         draw_ray_line_bonus(data, &data->raycast_f[i], offset_x, offset_y);
         i++;
     }
 }
+
+#endif

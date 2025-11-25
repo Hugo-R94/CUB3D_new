@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 12:15:37 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/29 12:24:25 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/24 16:32:53 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,27 @@ void	check_map_ff(t_data *data, t_map *map)
 		exit(1);
 	}
 }
+#ifdef BONUS
+
+void	check_map_ff_bonus(t_data *data, t_map *map)
+{
+	int	px;
+	int	py;
+
+	get_player_pos(map->map, &px, &py);
+	get_exit_pos(data);
+	check_map_floods(data, map, px, py);
+	if (check_player(map))
+	{
+		clean_exit_mand(data);
+		exit(1);
+	}
+	if (check_invalid(map->map) < 0)
+	{
+		printf("map is invalid : wrong type of tile\n");
+		clean_exit_mand(data);
+		exit(1);
+	}
+}
+
+#endif

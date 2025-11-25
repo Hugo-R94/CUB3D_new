@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:12:32 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/12 12:35:00 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:30:43 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	is_wall_hit(t_data *data, int mx, int my)
 		return (0);
 	if (mx < 0 || mx >= (int)ft_strlen(data->map->map[my]))
 		return (0);
-	return (data->map->map[my][mx] == '1' || data->map->map[my][mx] == '2');
+	return (data->map->map[my][mx] == '1');
 }
 #endif
 float	normalize_angle(float angle)

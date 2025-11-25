@@ -59,6 +59,8 @@ extern t_button g_home_button[];
 extern t_button gmd_selector[];
 extern t_button setting_menu_button[];
 extern t_button pause_button[];
+extern t_button g_death_menu[];
+extern t_button g_win_screen[];
 
 typedef struct s_txt
 {
@@ -73,7 +75,9 @@ typedef enum e_page_id
 	GMP_PG,
 	SETT_PG,
 	GAME_PG,
-	PAUSE_PG
+	PAUSE_PG,
+	DEATH_PG,
+	WIN_PG,
 }	t_page_id;
 
 
@@ -111,6 +115,8 @@ typedef struct s_pl
 	int		shoot_reload_timer;
 	int		shoot_reload;
 	int 	bullet_count;
+	int		chainsaw_offset;
+	int		is_alive;
 }	t_pl;
 
 typedef struct s_room 
@@ -168,6 +174,8 @@ typedef struct s_mouse
 	int		x_accel;
 	int		y_accel;
 	int		mouse_pressed;
+	int		mouse_button_lc;
+	int		mouse_button_rc;
 	int		button_hovered;
 	float	sensitivity;
 
@@ -258,12 +266,14 @@ typedef struct s_data
 	int		scale;
 	int		fps_cap;
 	float	fov;
-	int player_hp;
+	int		player_hp;
 	int		res_x;
 	t_pl	player;
 	int		shift_is_press;
 	int		shot1;
 	int		shot2;
+	float	xx;
+	float	xy;
 	int		w_is_press;
 	int		s_is_press;
 	int		a_is_press;
@@ -298,6 +308,7 @@ typedef struct s_data
 //     NULL // marqueur de fin
 // };
  void	draw_mini_map_centered(t_data *data, int radius, int thickness, int pos[2]);
+int		is_wall(t_data *data, int x, int y);
 void	draw_circle(t_data *img, int i[4], int color);
 void free_data_mand(t_data *data);
 void print_image_window_simple(t_data *data, const char *path, int x, int y);
@@ -305,6 +316,7 @@ void	upscale(t_data *data);
 void mlx_game_loop(t_data *data);
 void get_player_original_pos(t_data  *data);
 void	mouv_player(t_data *data);
+int check_open_door_collision(t_data *data, float x, float y, float r);
 void 	is_player_hit(t_data *data);
 void	draw_rect_fill(t_data *data, int pos[2], int scale[2], int color);
 void resize_window(t_data *data, int resx, int resy);
@@ -321,21 +333,17 @@ char	**ft_realloc(char **map, int size);
 float	normalize_angle(float angle);
 int handle_mouse_release(int button, int x, int y, t_data *data);
 int handle_mouse_press(int button, int x, int y, t_data *data);
-void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling);
 void	free_tab(char **map);
-float get_wall_x_coord(float dist_h, float dist_v,
-						float hit_x, float hit_y, float ra);
-t_txt *find_wall_txt(t_data *data, float dist_h, float dist_v, 
-							 float ra, float rx_h, float ry_h, 
-							 float rx_v, float ry_v);
+void draw_win_screen(t_data *data);
+void retry_game(t_data *data);
+void init_rand(void);
+
 char	get_player_pos(char **map, int *x, int *y);
 void	free_textures(t_data *data, t_txt *textures);
 int get_texture_x(t_img *img, float wall_x);
 void shooting(t_data *data);
 void	copy_texture_to_img(t_img *src, t_img *dst, int pos_x, int pos_y);
 void clear_and_exit(t_data *data);
-void   render_depth(t_f_img *image);
-void	draw_floor(t_data *data, int x, int y_start);
 void	reparse(char **map);
 uint32_t	depth_render(uint32_t color, int ray_length);
 void	draw_rect(t_data *data, int pos[2], int scale[2], int color);
@@ -351,7 +359,6 @@ void clean_map(char **map, int map_w, int map_h);
 void	free_textures_mand(t_txt *textures);
 void	draw_ceiling_img(t_data *data);
 void draw_ceiling_to_screen(t_data *data);
-void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling);
 void	free_map_content(t_data *data, t_map *map);
 void	free_map_struct(t_data *data, t_map *map);
 void	clean_exit_mand(t_data *data);
@@ -361,14 +368,20 @@ void draw_rays(t_data *data, int offset_x, int offset_y);
 void	mouv_player(t_data *data);
 void	draw_game_mode(t_data	*data);
 void draw_mobs(t_data *data);
+int		check_collision(t_data *data, float pos[2], float r, char c);
 char	**allocate_clone(char **map);
 char	**clone_map(char **map);
 void free_map(char **map);
+void	survivor_map(t_data *data);
+void	spawn_random_mob(t_data *data);
 void	new_map_random(t_data *data);
 void	check_map_ff(t_data *data, t_map *map);
 void	mob_path(t_data *data);
 char **make_map(t_data *data);
-void draw_mini_map(t_data *data, int offset_x, int offset_y);
+void get_exit_pos(t_data *data);
+void	draw_line(t_win *win, float x[2], float y[2], int color);
+void draw_sprite(t_data *data, float pos[2], char *sprite_name, float size);
+void	draw_exit(t_data *data);
 void	draw_home_page(t_data *data);
 void	draw_background_mand(t_data *data);
 void knockback(t_data *data);
@@ -376,10 +389,11 @@ void cast_horizontal_mob_ray(t_data *data, float *rx, float *ry, float angle);
 void cast_vertical_mob_ray(t_data *data, float *rx, float *ry, float angle);
 int	is_valid_map(t_data *data);
 int	check_arg_and_open(int ac, char **av);
-int	is_wall_hit(t_data *data, int mx, int my);
 void	draw_setting(t_data *data);
 // char **make_map(t_data *data, int level);
+ int check_wall_collision(t_data *data, float x, float y, float r);
 void	create_windows(t_win *win,t_data *data);
+void	draw_death_menu(t_data	*data);
 void	cleanup_data(t_data *data);
 float calculate_mob_distance(t_data *data, int i);
 void	init_textures_mand(t_data *data);
@@ -391,12 +405,16 @@ void	put_string_to_img(t_data *data, int pos[2], uint32_t color, char *str);
 int handle_close(void *param);
 int handle_key(int keycode, void *param);
 char	*ft_sprintf(const char *format, ...);
+void	spawn_random_mob(t_data *data);
 t_txt *init_textures(t_data *data);
 void go_play_menu(t_data *data);
 void	cast_vertical_ray(t_data *data, float *rx, float *ry, float angle);
+int get_rand_d(int min, int max);
+float get_rand_f(float min, float max);
 void	cast_horizontal_ray(t_data *data, float *rx, float *ry, float angle);
 void go_setting_menu(t_data *data);
 int is_door_hit(t_data *data, int mx, int my);
+void use_chainsaw(t_data *data);
 void	print_texture_set(t_txt *txt);
 void	cast_horizontal_ray(t_data *data, float *rx, float *ry, float angle);
 void	cast_vertical_ray(t_data *data, float *rx, float *ry, float angle);
@@ -439,6 +457,7 @@ void	resize_1280(t_data *data);
 void	resize_1920(t_data *data);
 void	draw_setting(t_data *data);
 void 	draw_background_mand(t_data *data);
+
 //GAME SELECTOR MENU
 void	play_mainmenu(t_data *data);
 void	play_mandatory(t_data *data);
@@ -457,4 +476,22 @@ void	render_gameplay_full(t_data *data);
 //HANDLE PAUSE MENU
 void	draw_pause_menu(t_data *data);
 void darken_image(t_img *img, float factor);
+int	is_wall_hit(t_data *data, int mx, int my);
+#ifdef BONUS
+
+void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling);
+void   render_depth(t_f_img *image);
+t_txt *find_wall_txt(t_data *data, float dist_h, float dist_v, 
+							 float ra, float rx_h, float ry_h, 
+							 float rx_v, float ry_v);
+float get_wall_x_coord(float dist_h, float dist_v,
+						float hit_x, float hit_y, float ra);
+void	draw_floor(t_data *data, int x, int y_start);
+void render_gameplay(t_data *data);
+void pp_depth(t_f_img *f_img);
+void animate_door(t_data *data);
+int	is_wall_hit(t_data *data, int mx, int my);
+void init_mob(t_data *data);
+
+#endif
 #endif

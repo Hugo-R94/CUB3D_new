@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pause_menu.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 17:31:16 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/29 11:41:01 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/21 15:31:52 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	darken_image(t_img *img, float factor)
 
 void	draw_pause_menu(t_data *data)
 {
+	
 	put_string_to_img(data, (int []){195, 100}, 0xFF0000, "PAUSE MENU");
 	draw_rect(data, (int []){170, 150}, (int []){300, 75}, 0xFF0000);
 	put_string_to_img(data, (int []){245, 175}, 0xFF0000, "RESUME");

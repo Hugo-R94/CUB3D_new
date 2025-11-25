@@ -6,13 +6,37 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:17:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 18:08:38 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/25 13:26:42 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 #ifdef BONUS
+
+void	get_exit_pos(t_data *data)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (data->map->map[y])
+	{
+		x = 0;
+		while (data->map->map[y][x])
+		{
+			if (data->map->map[y][x] == 'X')
+			{
+				data->xx = (float)x + 0.5;
+				data->xy = (float)y + 0.5;
+				break ;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
 void	init_data_part1(t_data *data)
 {
 	data->scale = 3;
@@ -37,8 +61,11 @@ void	init_data_part1(t_data *data)
 	data->player.parralax_x = 0;
 	data->o_is_press = 0;
 	data->fov = M_PI / 3;
-	printf("fov = %f\n",data->fov);
 	data->in_game = 0;
+}
+
+void	init_data_part2(t_data *data)
+{
 	data->fps_cap = 30;
 	data->slider_button1 = 0;
 	data->slider_button2 = 0;
@@ -51,17 +78,36 @@ void	init_data_part1(t_data *data)
 	data->player.mouv_speed = (data->res_x * 0.00003125) * 5;
 	data->win_op = 1;
 	data->timer = 0;
-
-	// data->slider_button[0] = 0;
+	data->player.bullet_count = 0;
+	data->player.shoot_reload = 1;
+	data->player.shoot_reload_timer = 15;
 	data->player.pl_height = 0;
 	data->offset_door_ratio = 0.0f;
-	data->mouse.sensitivity =  0.001f;
-	data->raycast_f = calloc(640 ,sizeof(t_raycast));
-    if (!data->raycast_f)
-    {
-        printf("Error: malloc raycast_final failed\n");
-        exit(1);
-    }
+	data->mouse.sensitivity = 0.001f;
+	data->raycast_f = calloc(640, sizeof(t_raycast));
+	init_rand();
+	if (!data->raycast_f)
+	{
+		printf("Error: malloc raycast_final failed\n");
+		exit(1);
+	}
+}
+
+void	init_data_part3(t_data *data)
+{
+	data->render_gmp = calloc(1, sizeof(t_f_img));
+	if (!data->render_gmp)
+		perror("calloc render_gmp");
+	data->render_gmp->img = mlx_new_image(data->win->mlx,
+			data->res_x, data->res_y);
+	data->render_gmp->pixels = calloc(data->res_x * data->res_y, sizeof(t_px));
+	if (!data->render_gmp->pixels)
+		perror("calloc pixels");
+	data->render_gmp->height = data->res_y;
+	data->render_gmp->width = data->res_x;
+	data->txt = init_textures(data);
+	if (!data->txt)
+		perror("calloc txt");
 }
 
 t_data	*init_data(void)
@@ -80,52 +126,14 @@ t_data	*init_data(void)
 	if (!data->map)
 		perror("calloc map");
 	create_windows(data->win, data);
-	// data->ceiling = calloc(1, sizeof(t_img));
 	if (!data->ceiling)
 		perror("calloc ceiling");
 	data->ceiling = mlx_new_image(data->win->mlx, data->res_x, data->res_y);
-	init_data_part1(data);
 	if (!data->ceiling)
 		perror("mlx_new_image ceiling");
-	data->render_gmp = calloc(1,sizeof(t_f_img));
-	data->render_gmp->img = mlx_new_image(data->win->mlx, data->res_x, data->res_y);
-	data->render_gmp->pixels = calloc(data->res_x * data->res_y,sizeof(t_px));
-	data->render_gmp->height = data->res_y;
-	data->render_gmp->width = data->res_x;
-	data->txt = init_textures(data);
-	if (!data->txt)
-		perror("calloc txt");
-	return (data);
-}
-
-#else
-
-t_data	*init_data(void)
-{
-	t_data	*data;
-
-	data = calloc(1, sizeof(t_data));
-	if (!data)
-	{
-		perror("calloc data");
-		exit(EXIT_FAILURE);
-	}
-	data->res_x = 1920;
-	data->res_y = 1080;
-	data->player.rot_speed = 0.032 * 2;
-	data->player.mouv_speed = 0.064 * 2;
-	data->a_is_press = 0;
-	data->w_is_press = 0;
-	data->s_is_press = 0;
-	data->d_is_press = 0;
-	data->fov = (M_PI / 3);
-	data->win = calloc(1, sizeof(t_win));
-	if (!data->win)
-	{
-		perror("calloc win");
-		exit(EXIT_FAILURE);
-	}
-	create_windows(data->win, data);
+	init_data_part1(data);
+	init_data_part2(data);
+	init_data_part3(data);
 	return (data);
 }
 

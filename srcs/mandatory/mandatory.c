@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mandatory.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:13:36 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/29 12:43:50 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/24 15:33:03 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	render_frame_mandatory(t_data *data)
 	gettimeofday(&st, NULL);
 	mouv_player(data);
 	draw_walls_3d(data);
-	draw_mini_map(data, 25, 25);
 	gettimeofday(&end, NULL);
 	elapsed = (end.tv_sec - st.tv_sec) * 1000000L + (end.tv_usec - st.tv_usec);
 	fps = 1000000 / elapsed;
@@ -32,7 +31,6 @@ int	render_frame_mandatory(t_data *data)
 		usleep(frame_time_us - elapsed);
 	mlx_put_image_to_window(data->win->mlx, data->win->win,
 		data->win->img, 0, 0);
-	mlx_string_put(data->win->mlx, data->win->win,50,50,0xFF0000, ft_itoa(fps));
 	return (0);
 }
 

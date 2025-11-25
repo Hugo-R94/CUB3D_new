@@ -6,12 +6,11 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 17:19:15 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/11 14:40:40 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:28:34 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-#ifdef BONUS
 
 
 // static void	update_direction_vector(t_data *data)
@@ -20,41 +19,18 @@
 // 	data->player.pdy = sin(data->player.pa) * 3;
 // }
 
-int		is_wall(t_data *data, int x, int y)
-{
-	if (data->map->map[x][y] == '1' || data->map->map[x][y] == '2'
-		|| data->map->map[x][y] == '3' || data->map->map[x][y] == 'D')
-		return(1);
-	return(0);
-}
-static void	handle_rotation(t_data *data)
-{
-	// if (data->a_is_press)
-	// {
-	// 	data->player.pa -= data->player.rot_speed;
-	// 	if (data->player.pa < 0)
-	// 		data->player.pa += 2 * M_PI;
-	// 	update_direction_vector(data);
-	// }
-	// if (data->d_is_press)
-	// {
-	// 	data->player.pa += data->player.rot_speed;
-	// 	if (data->player.pa > 2 * M_PI)
-	// 		data->player.pa -= 2 * M_PI;
-	// 	update_direction_vector(data);
-	// }
-	// printf("pa = %f | x accel = %d | diff = %f\n",data->player.pa, data->mouse.x_accel, data->player.pa - data->mouse.x_accel);
-	// float sensitivity = 0.01f; // à ajuster selon le feeling
-	// data->player.pa += data->mouse.x_accel * sensitivity;
-	// // normaliser l'angle pour qu'il reste dans [0, 2PI]
-	// if (data->player.pa < 0)
-	// 	data->player.pa += 2 * M_PI;
-	// else if (data->player.pa >= 2 * M_PI)
-	// 	data->player.pa -= 2 * M_PI;
-	if (data)
-		printf("");
+// int		is_wall(t_data *data, int x, int y)
+// {
+// 	if (x < 0 || y < 0 || x >= data->map->width || y >= data->map->height)
+//         return (-1);
+// 	if (data->map->map[x][y] == '1' || data->map->map[x][y] == '2'
+// 		|| data->map->map[x][y] == '3' || data->map->map[x][y] == 'D')
+// 		return(1);
+// 	return(0);
+// }
+#ifdef BONUS
 
-}
+
 
 
 static void	handle_movement(t_data *data)
@@ -62,7 +38,7 @@ static void	handle_movement(t_data *data)
 	double next_px;
 	double next_py;
 	double move_speed = data->player.mouv_speed;
-	static pole = -1;
+	static int pole = -1;
 	// Avancer
 	static int up = 1;
 
@@ -79,15 +55,15 @@ static void	handle_movement(t_data *data)
 			else
 				up = 1;		
 			
-	}
+	}//change collision system like for this one 
 	if (data->w_is_press)
 	{
 		next_px = data->player.px + cos(data->player.pa) * move_speed;
 		next_py = data->player.py + sin(data->player.pa) * move_speed;
 
-		if (!is_wall(data, (int)next_py, (int)data->player.px))
+		if (!check_wall_collision(data, data->player.px, next_py, 0.1))
 			data->player.py = next_py;
-		if (!is_wall(data, (int)data->player.py, (int)next_px))
+		if (!check_wall_collision(data, next_px, data->player.py, 0.1))
 			data->player.px = next_px;
 	}
 
@@ -97,9 +73,10 @@ static void	handle_movement(t_data *data)
 		next_px = data->player.px - cos(data->player.pa) * move_speed;
 		next_py = data->player.py - sin(data->player.pa) * move_speed;
 
-		if (!is_wall(data, (int)next_py, (int)data->player.px))
+		
+		if (!check_wall_collision(data, data->player.px, next_py, 0.1))
 			data->player.py = next_py;
-		if (!is_wall(data, (int)data->player.py, (int)next_px))
+		if (!check_wall_collision(data, next_px, data->player.py, 0.1))
 			data->player.px = next_px;
 	}
 
@@ -109,9 +86,10 @@ static void	handle_movement(t_data *data)
 		next_px = data->player.px - sin(data->player.pa) * move_speed;
 		next_py = data->player.py + cos(data->player.pa) * move_speed;
 
-		if (!is_wall(data, (int)next_py, (int)data->player.px))
+		
+		if (!check_wall_collision(data, data->player.px, next_py, 0.1))
 			data->player.py = next_py;
-		if (!is_wall(data, (int)data->player.py, (int)next_px))
+		if (!check_wall_collision(data, next_px, data->player.py, 0.1))
 			data->player.px = next_px;
 	}
 
@@ -121,9 +99,10 @@ static void	handle_movement(t_data *data)
 		next_px = data->player.px + sin(data->player.pa) * move_speed;
 		next_py = data->player.py - cos(data->player.pa) * move_speed;
 
-		if (!is_wall(data, (int)next_py, (int)data->player.px))
+		
+		if (!check_wall_collision(data, data->player.px, next_py, 0.1))
 			data->player.py = next_py;
-		if (!is_wall(data, (int)data->player.py, (int)next_px))
+		if (!check_wall_collision(data, next_px, data->player.py, 0.1))
 			data->player.px = next_px;
 	}
 }
@@ -135,10 +114,7 @@ void	mouv_player(t_data *data)
 	if (!data)
 		return ;
 	if(data->current_pg == GAME_PG)
-	{
-		handle_rotation(data);
 		handle_movement(data);
-	}
 }
 
 

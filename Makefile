@@ -46,6 +46,7 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(CHECK_DIR)/check_map.c \
 				$(CHECK_DIR)/check_map_utils.c \
 				$(INIT_DIR)/init_texture.c \
+				$(INIT_DIR)/init_mob.c \
 				$(INIT_DIR)/init_texture_bonus.c \
 				$(INIT_DIR)/windows.c \
 				$(INIT_DIR)/data.c \
@@ -65,10 +66,22 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/handle_setting_menu.c \
 				$(GRP_DIR)/raycasting.c \
 				$(GRP_DIR)/raycasting_h.c \
+				$(GRP_DIR)/handle_death_menu.c \
 				$(GRP_DIR)/floor_render_bonus.c \
+				$(GRP_DIR)/win_screen.c \
+				$(GRP_DIR)/draw_sprite.c \
+				$(GRP_DIR)/post_process.c \
+				$(GRP_DIR)/animate.c \
+				$(GRP_DIR)/exit_render.c \
 				srcs/utils/rand.c \
 				srcs/gameplay/mob.c \
 				srcs/gameplay/collision.c \
+				srcs/gameplay/wall_collision.c \
+				srcs/gameplay/shoot.c \
+				srcs/gameplay/chainsaw.c \
+				srcs/gameplay/mode.c \
+				srcs/gameplay/mode1.c \
+				srcs/gameplay/spawn_mob.c \
 				$(GRP_DIR)/draw_mob.c \
 				$(GRP_DIR)/ceiling_render_bonus.c \
 				$(GRP_DIR)/wall_render_bonus.c \
@@ -81,7 +94,6 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/render_gameplay.c \
 				$(GRP_DIR)/render_mandatory.c \
 				$(GRP_DIR)/render_bonus.c \
-				$(GRP_DIR)/ceiling.c \
 				$(GRP_DIR)/resize.c \
 				$(GRP_DIR)/upscale.c \
 				$(SRC_DIR)/ft_sprintf.c \

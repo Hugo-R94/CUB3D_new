@@ -6,20 +6,31 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 15:25:16 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 12:09:19 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/20 12:46:58 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 #ifdef BONUS
 
+
+//button = 1 : clic gauche 
+//button = 3 : clic droit
+//button = 2 : clicl molette
 int	handle_mouse_click(int button, int x, int y, t_data *data)
 {
 	int			i;
 	float		scale[2];
 	int			mouse_scaled[2];
 	t_button	*b;
-	data->mouse.mouse_pressed = 1;
+	printf("button = %d\n",button);
+	if (button == 1)
+		data->mouse.mouse_button_lc = 1;
+	if (button == 3)
+	{
+		data->mouse.mouse_button_rc = 1;
+		printf("clic droit\n");
+	}
 	if (button != 1)
 		return (0);
 	scale[0] = 640.0f / (float)data->res_x;
@@ -40,102 +51,17 @@ int	handle_mouse_click(int button, int x, int y, t_data *data)
 	}
 	return (0);
 }
-void shooting(t_data *data)
-{
-    t_pl *p = &data->player;
-    static int bullet_had_hitted = 0;
 
-    if (!data->render_gmp || !data->render_gmp->pixels)
-        return;
-
-    if (data->mouse.mouse_pressed)
-    {
-        if (!p->is_shooting && p->shoot_cd == 0 && !p->shoot_reload)
-        {
-            p->is_shooting = 1;
-            p->shoot_timer = 0;
-        }
-    }
-
-    if (p->is_shooting && p->shoot_timer <= 10)
-    {
-        int cx = data->render_gmp->width / 2;
-        int cy = data->render_gmp->height / 2;
-
-        // Vérifie que cx et cy sont dans les limites
-        if (cx < 0 || cx >= data->render_gmp->width ||
-            cy < 0 || cy >= data->render_gmp->height)
-        {
-            return;
-        }
-
-        int index = cy * data->render_gmp->width + cx;
-        t_px *px = &data->render_gmp->pixels[index];
-
-        // Vérifie que px->id est valide
-        if (px->type == PX_MOB && bullet_had_hitted == 0 &&
-            px->id >= 0 && px->id < data->mob_count)
-        {
-            data->mob[px->id].hp -= 1;
-            data->mob[px->id].knockback = 1;
-            printf("mob toucher | mob n%d hp = %d\n", px->id, data->mob[px->id].hp);
-            bullet_had_hitted = 1;
-        }
-
-        p->shoot_timer++;
-    }
-
-    // Fin du tir
-    if (p->is_shooting && p->shoot_timer > 10)
-    {
-        p->is_shooting = 0;
-        data->player.bullet_count++;
-        if (data->player.bullet_count >= 2)
-        {
-            p->shoot_reload = 1;
-            p->shoot_reload_timer = 0;
-        }
-        else
-        {
-            p->shoot_cd = 1;
-            p->shoot_cd_timer = 0;
-        }
-        bullet_had_hitted = 0;
-        p->shoot_timer = 0;
-    }
-
-    // Gestion cooldown
-    if (!p->is_shooting && p->shoot_cd)
-    {
-        p->shoot_cd_timer++;
-        if (p->shoot_cd_timer > 5)
-        {
-            p->shoot_cd_timer = 0;
-            p->shoot_cd = 0;
-        }
-    }
-
-    // Gestion recharge
-    if (!p->is_shooting && p->shoot_reload)
-    {
-        p->shoot_reload_timer++;
-        if (p->shoot_reload_timer > 50)
-        {
-            p->shoot_reload_timer = 0;
-            p->shoot_reload = 0;
-            data->player.bullet_count = 0;
-        }
-    }
-}
 
 
 
 int handle_mouse_press(int button, int x, int y, t_data *data)
 {
+	printf("mouse boutton = %d\n", button);
 	if (button == 1) // bouton gauche
-		data->mouse.mouse_pressed = 1;
-	if (data->mouse.mouse_pressed == 1)
-		printf("mouse preessed\n");
+		data->mouse.mouse_button_lc = 1;
+	if (data->mouse.mouse_button_lc == 1)
+		printf("mouse left preessed\n");
 	data->mouse.mouse_x = x;
 	data->mouse.mouse_y = y;
 	return (0);
@@ -144,7 +70,9 @@ int handle_mouse_press(int button, int x, int y, t_data *data)
 int handle_mouse_release(int button, int x, int y, t_data *data)
 {
 	if (button == 1)
-		data->mouse.mouse_pressed = 0;
+		data->mouse.mouse_button_lc = 0;
+	if (button == 3)
+		data->mouse.mouse_button_rc = 0;
 	data->mouse.mouse_x = x;
 	data->mouse.mouse_y = y;
 	return (0);

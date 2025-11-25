@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:38:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/10 12:42:39 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 16:35:35 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	clean_data(t_data *data)
 			free_map(data->map->map);
 		free(data->map);
 	}
-
 	if (data->raycast_f)
 		free(data->raycast_f);
 	free(data);
@@ -79,12 +78,8 @@ void	free_textures(t_data *data, t_txt *textures)
 	int	i;
 
 	i = 0;
-	if (data)
-		printf("");
 	while (textures[i].name)
 	{
-		// if (data->win->mlx && textures[i].img.image)
-		// 	mlx_destroy_image(data->win->mlx, textures[i].img.image);
 		free(textures[i].name);
 		free(textures[i].path);
 		i++;

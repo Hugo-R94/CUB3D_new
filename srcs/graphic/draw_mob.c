@@ -6,12 +6,13 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:44:02 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/19 19:03:22 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:49:54 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
+#ifdef BONUS
 float calculate_mob_distance(t_data *data, int i)
 {
     float dx;
@@ -57,6 +58,54 @@ static int get_tex_coord(int screen, int start, float ratio, int max)
     return (coord);
 }
 
+static void draw_mob_column_mirror(t_data *data, t_txt *tex, int x, int *bounds, float depth, int id)
+{
+    int y;
+    int tex_x;
+    int tex_y;
+    int color;
+    int index;
+    float tex_ratio_x;
+    float tex_ratio_y;
+    int flipped_tex_x;
+    
+    // Calculer les ratios texture/écran
+    tex_ratio_x = (float)tex->img.width / (float)bounds[1];
+    tex_ratio_y = (float)tex->img.height / (float)bounds[0];
+    
+    // Coordonnée X dans la texture
+    tex_x = get_tex_coord(x, bounds[2], tex_ratio_x, tex->img.width);
+
+    // Flip horizontal : on inverse tex_x
+    flipped_tex_x = tex->img.width - 1 - tex_x;
+
+    y = bounds[4] - 1;
+    while (++y < bounds[5])
+    {
+        if (y < 0 || y >= data->render_gmp->height)
+            continue;
+        
+        tex_y = get_tex_coord(y, bounds[4], tex_ratio_y, tex->img.height);
+        color = get_pixel(&tex->img, flipped_tex_x, tex_y);
+        
+        if (color != 0x000000)
+        {
+            index = y * data->render_gmp->width + x;
+            if (index >= 0 && index < data->render_gmp->width * data->render_gmp->height)
+            {
+                if (data->render_gmp->pixels[index].type == PX_EMPTY 
+                    || depth < data->render_gmp->pixels[index].depth)
+                {
+                    data->render_gmp->pixels[index].color = color;
+                    data->render_gmp->pixels[index].depth = depth;
+                    data->render_gmp->pixels[index].type = PX_MOB;
+                    data->render_gmp->pixels[index].id = id;
+                }
+            }
+        }
+    }
+}
+
 static void draw_mob_column(t_data *data, t_txt *tex, int x, int *bounds, float depth, int id)
 {
     int y;
@@ -100,18 +149,33 @@ static void draw_mob_column(t_data *data, t_txt *tex, int x, int *bounds, float 
     }
 }
 
-static void 	draw_mob_sprite(t_data *data, t_txt *tex, int *bounds, float depth, int id)
+static void draw_mob_sprite(t_data *data, t_txt *tex, int *bounds, float depth, int id)
 {
-	int x;
-
-	x = bounds[2] - 1;
-	while (++x < bounds[3])
-	{
-		if (x < 0 || x >= data->render_gmp->width)
-			continue;
-		draw_mob_column(data, tex, x, bounds, depth, id);
-	}
+    int x;
+    static int t_anim = 0;
+    static int sprite = 1;
+     
+    if (t_anim >= 22 && data->game_on)
+    {
+        t_anim = 0;
+        sprite *= -1;
+    }
+    if (data->mob[id].chase)
+        t_anim++;
+    x = bounds[2] - 1;
+    while (++x < bounds[3])
+    {
+        if (x < 0 || x >= data->render_gmp->width)
+            continue;
+        if (sprite == 1)
+            draw_mob_column(data, tex, x, bounds, depth, id);
+        else
+            draw_mob_column_mirror(data, tex, x, bounds, depth, id);
+    }
 }
+
+
+
 
 void draw_single_mob(t_data *data, int i, char *txt_name, float height_scale)
 {
@@ -175,7 +239,9 @@ void draw_mobs(t_data *data)
 	while (i < data->mob_count && data->mob[i].mx != 0)
 	{
 		if (data->mob[i].is_alive)
+            // draw_sprite(data, (float []){data->mob[i].mx, data->mob[i].my}, data->mob[i].sprite, data->mob[i].size);
 			draw_single_mob(data, i,data->mob[i].sprite, data->mob[i].size);
 		i++;
 	}
 }
+#endif

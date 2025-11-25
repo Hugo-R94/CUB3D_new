@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:11:13 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/28 14:24:02 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/24 16:33:46 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static void	validate_args(int ac, char **av)
 	}
 	if (name_checker(av[1]) == 0)
 	{
-		ft_printf("Error: Invalid map name: %s%s%s > Map must be a .cub file.\n",
+		ft_printf("Error: ");
+		ft_printf("Invalid map name: %s%s%s > Map must be a .cub file.\n",
 			RED, av[1], RESET);
 		exit(1);
 	}

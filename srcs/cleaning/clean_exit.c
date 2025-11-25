@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:24:36 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 12:16:51 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 16:36:46 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	clean_and_exit(t_data *data, int exit_code)
 		{
 			if (data->ceiling->image)
 				mlx_destroy_image(data->win->mlx, data->ceiling);
-			if(data->ceiling)
+			if (data->ceiling)
 				free(data->ceiling);
 		}
 		clean_windows(data->win);
@@ -30,10 +30,10 @@ int	clean_and_exit(t_data *data, int exit_code)
 	exit(exit_code);
 }
 
-void destroy_all_img(t_data *data)
+void	destroy_all_img(t_data *data)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	if (data->ceiling)
 	{
@@ -52,9 +52,7 @@ void destroy_all_img(t_data *data)
 			mlx_destroy_image(data->win->mlx, data->txt[i].img.image);
 		i++;
 	}
-	
 }
-
 
 void	clear_and_exit(t_data *data)
 {

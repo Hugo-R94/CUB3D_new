@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 11:55:39 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/14 15:45:20 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/24 15:54:18 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,6 @@ static void	cast_mob_rays(t_data *data, t_raycast *raycast)
 	cast_horizontal_mob_ray(data, &raycast->rx_h,  &raycast->ry_h,  raycast->ra);
 	cast_vertical_mob_ray(data,  &raycast->rx_v,  &raycast->ry_v,  raycast->ra);
 }
-// static void calculate_distances_door(t_data *data, t_raycast *raycast, float *dist_h, float *dist_v)
-// {
-//     float rx_h = raycast->rx_h;
-//     float ry_h = raycast->ry_h;
-//     float rx_v = raycast->rx_v;
-//     float ry_v = raycast->ry_v;
-	
-//     // Collision horizontale : ajuste seulement Y
-//     if (data->player.py > raycast->ry_h)
-//         ry_h -= 0.5;  // joueur en dessous → pousse le centre vers le bas
-//     else
-//         ry_h += 0.5;  // joueur au-dessus → pousse vers le haut
-
-//     // Collision verticale : ajuste seulement X
-//     if (data->player.px > raycast->rx_v)
-//         rx_v -= 0.5;  // joueur à droite → pousse le centre vers la droite
-//     else
-//         rx_v += 0.5;  // joueur à gauche → pousse vers la gauche
-
-//     *dist_h = sqrtf(powf(rx_h - data->player.px, 2) + powf(ry_h - data->player.py, 2));
-//     *dist_v = sqrtf(powf(rx_v - data->player.px, 2) + powf(ry_v - data->player.py, 2));
-// }
-
 
 static void	get_final_distance(t_data *data, float dist_h, float dist_v, float ra, float *dist_final)
 {
@@ -98,20 +75,6 @@ static void	calculate_wall_dimensions(t_data *data, float dist_final, int *line_
 	*line_h = (int)(plane_dist / dist_final * factor);
 	*line_off = (screen_h - *line_h) / 2 +  data->tilt + data->player.pl_height;
 }
-// static void calculate_wall_dimensions(t_data *data, float dist_final, int *line_h, int *line_off, int wall_units)
-// {
-//     float plane_dist;
-//     int screen_h = 480;
-//     int screen_w = 640;
-
-//     plane_dist = (screen_w / 2.0f) / tan(data->fov / 2.0f);
-
-//     int normal_height = (int)(plane_dist / dist_final);
-//     *line_h = normal_height * wall_units;
-
-//     int floor_y = screen_h / 2 + data->tilt + data->player.pl_height;
-//     *line_off = floor_y - *line_h;
-// }
 
 static void	get_texture_info(t_data *data, float dist[2], t_raycast *raycast, t_txt **txt)
 {
@@ -151,44 +114,6 @@ static void	render_column(t_data *data, int value[5], t_txt *txt, float dist_fin
 	draw_floor(data,  value[0], value[3] + value[2]);
 }
 
-
-// static void process_single_ray(t_data *data, int i, float ra)
-// {
-// 	t_raycast   raycast;
-// 	t_raycast   door_ray;
-// 	float       dist_h;
-// 	float       dist_v;
-// 	float       door_dist_h;
-// 	float       door_dist_v;
-	
-// 	float       dist_final;
-// 	int         line_h;
-// 	int         line_off;
-	
-// 	// ===== RENDU DU MUR =====
-// 	raycast.ra = ra;
-// 	cast_rays(data, &raycast);
-// 	calculate_distances(data, &raycast, &dist_h, &dist_v);
-// 	get_final_distance(data, dist_h, dist_v, ra, &dist_final);
-// 	calculate_wall_dimensions(data, dist_final, &line_h, &line_off);
-	
-// 	t_txt *txt;
-// 	get_texture_info(data, (float []){dist_h, dist_v}, &raycast, &txt);
-	
-// 	int y_ceiling_end;
-// 	int y_floor_start;
-// 	float       dist_final_door;
-// 	calculate_vertical_limits(line_off, line_h, &y_ceiling_end, &y_floor_start);
-// 	render_column(data, (int []){i, y_ceiling_end, line_h, line_off, raycast.tex_x}, txt, dist_final);
-	
-// 	cast_doors_rays(data, &door_ray);
-// 	calculate_distances(data, &door_ray, &door_dist_h, &door_dist_v);
-// 	get_final_distance(data,door_dist_h, door_dist_v, ra, &dist_final_door);
-// 	calculate_wall_dimensions(data, dist_final_door, &line_h, &line_off);
-// 	get_texture_info(data, (float []){door_dist_h, door_dist_v}, &door_ray, &txt);
-// 	if (dist_final_door <= dist_final)
-// 		draw_door_column(data,(int []){i, y_ceiling_end, line_h, line_off, raycast.tex_x},find_texture(txt,"door")->img.image,dist_final);
-// }
 static void	get_final_distance_door(t_data *data, float dist_h, float dist_v, float ra, float *dist_final)
 {
 	float	dist_raw;
@@ -230,70 +155,87 @@ static void	prepare_mob_column(t_column_info *c, int line_h, int line_off, t_img
 		
 }
 
-static void process_single_ray(t_data *data, int i, float ra)
+/* Fonction helper pour stocker les coordonnées du rayon */
+static void store_ray_coords(t_data *data, int i, t_raycast *ray, float dists[2])
 {
-    t_raycast raycast;
-    t_raycast door_ray;
-	t_raycast mob_ray;
-    float dist_h, dist_v, dist_final;
-    float door_dist_h, door_dist_v, door_dist_final;
-    float mob_dist_h, mob_dist_v, mob_dist_final;
-    int line_h, line_off;
-    t_txt *txt;
-    
-    // ===== MUR =====
+    if (dists[0] < dists[1])
+    {
+        data->raycast_f[i].rx = ray->rx_h;
+        data->raycast_f[i].ry = ray->ry_h;
+        data->raycast_f[i].rx_final = ray->rx_h;
+        data->raycast_f[i].ry_final = ray->ry_h;
+    }
+    else
+    {
+        data->raycast_f[i].rx = ray->rx_v;
+        data->raycast_f[i].ry = ray->ry_v;
+        data->raycast_f[i].rx_final = ray->rx_v;
+        data->raycast_f[i].ry_final = ray->ry_v;
+    }
+    data->raycast_f[i].ra = ray->ra;
+}
+
+/* Fonction pour calculer et dessiner le mur */
+static void process_wall(t_data *data, int i, float ra, float *dist_final)
+{
+    t_raycast   raycast;
+    float       dists[2];
+    int         dims[2];
+    t_txt       *txt;
+
     raycast.ra = ra;
     cast_rays(data, &raycast);
-    calculate_distances(data, &raycast, &dist_h, &dist_v);
-    get_final_distance(data, dist_h, dist_v, ra, &dist_final);
-    calculate_wall_dimensions(data, dist_final, &line_h, &line_off, 1);
-    get_texture_info(data, (float []){dist_h, dist_v}, &raycast, &txt);
-    
-    int y_ceiling_end, y_floor_start;
-    calculate_vertical_limits(line_off, line_h, &y_ceiling_end, &y_floor_start,1);
-    render_column(data, (int []){i, y_ceiling_end, line_h , line_off, raycast.tex_x}, txt, dist_final);
-    
-    // ===== PORTE =====
+    calculate_distances(data, &raycast, &dists[0], &dists[1]);
+    get_final_distance(data, dists[0], dists[1], ra, dist_final);
+    calculate_wall_dimensions(data, *dist_final, &dims[0], &dims[1], 1);
+    get_texture_info(data, dists, &raycast, &txt);
+    store_ray_coords(data, i, &raycast, dists);
+    render_column(data, (int []){i, dims[1], dims[0], dims[1], raycast.tex_x},
+        txt, *dist_final);
+}
+
+/* Fonction pour ajuster les dimensions de la porte */
+static void adjust_door_dimensions(int *line_h, int *line_off)
+{
+    int original_bottom;
+
+    original_bottom = *line_off + *line_h;
+    *line_off = original_bottom - *line_h;
+}
+
+/* Fonction pour calculer et dessiner la porte */
+static void process_door(t_data *data, int i, float ra, float wall_dist)
+{
+    t_raycast   door_ray;
+    float       dists[3];
+    int         dims[2];
+    t_txt       *txt;
+
     door_ray.ra = ra;
     cast_doors_rays(data, &door_ray);
-
-    calculate_distances(data, &door_ray, &door_dist_h, &door_dist_v);
-    get_final_distance(data, door_dist_h, door_dist_v, ra, &door_dist_final);
-    
-    if (door_dist_final > 0 && door_dist_final < dist_final)
+    calculate_distances(data, &door_ray, &dists[0], &dists[1]);
+    get_final_distance(data, dists[0], dists[1], ra, &dists[2]);
+    if (dists[2] > 0 && dists[2] < wall_dist)
     {
-        // La porte est plus proche
-        int door_line_h, door_line_off;
-        
-        if (door_dist_h < door_dist_v)
-        {
-            data->raycast_f[i].rx = door_ray.rx_h;
-            data->raycast_f[i].ry = door_ray.ry_h;
-            data->raycast_f[i].rx_final = door_ray.rx_h;
-            data->raycast_f[i].ry_final = door_ray.ry_h;
-        }
-        else
-        {
-            data->raycast_f[i].rx = door_ray.rx_v;
-            data->raycast_f[i].ry = door_ray.ry_v;
-            data->raycast_f[i].rx_final = door_ray.rx_v;
-            data->raycast_f[i].ry_final = door_ray.ry_v;
-        }
-        data->raycast_f[i].ra = ra;
-        
-        calculate_wall_dimensions(data, door_dist_final, &door_line_h, &door_line_off, 1);
-        
-        // Réduire la hauteur de moitié et garder le sol au même niveau
-        int original_bottom = door_line_off + door_line_h;  // Position du bas avant réduction
-        door_line_off = original_bottom - door_line_h;      // Repositionner pour garder le même sol
-        
-        get_texture_info(data, (float []){door_dist_h, door_dist_v}, &door_ray, &txt);
-        calculate_vertical_limits(door_line_off, door_line_h, &y_ceiling_end, &y_floor_start,1);
-        draw_door_column(data, (int []){i, y_ceiling_end, door_line_h, door_line_off, door_ray.tex_x}, &txt->img, door_dist_final);
+        store_ray_coords(data, i, &door_ray, dists);
+        calculate_wall_dimensions(data, dists[2], &dims[0], &dims[1], 1);
+        adjust_door_dimensions(&dims[0], &dims[1]);
+        get_texture_info(data, dists, &door_ray, &txt);
+        draw_door_column(data, (int []){i, dims[1], dims[0], dims[1],
+            door_ray.tex_x}, &txt->img, dists[2]);
     }
 }
 
-void draw_walls_3d(t_data *data)
+/* Fonction principale */
+static void process_single_ray(t_data *data, int i, float ra)
+{
+    float   wall_dist;
+
+    process_wall(data, i, ra, &wall_dist);
+    process_door(data, i, ra, wall_dist);
+}
+
+void render_gameplay(t_data *data)
 {
     float ra;
     int i;
@@ -319,5 +261,6 @@ void draw_walls_3d(t_data *data)
     }
     // Dessiner les mobs par-dessusp
     draw_mobs(data);
+	draw_exit(data);
 }
 #endif

@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:37:41 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/19 12:03:33 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/20 15:03:08 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	draw_floor(t_data *data, int x, int y_start)
 	t_txt	*floor;
 	int		y;
 
-	floor = find_texture(data->txt, "ground");
+	floor = find_texture(data->txt, "floor");
 	if (!floor || !floor->img.data)
 		return ;
 	y = y_start;
