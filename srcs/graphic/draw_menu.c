@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 10:50:03 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/21 15:47:32 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 12:24:01 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_button	g_home_button[] = {
 void	go_play_menu(t_data *data)
 {
 	data->current_pg = GMP_PG;
-	data->current_buttons = gmd_selector;
+	data->current_buttons = g_gmd_selector;
 }
 
 void	go_setting_menu(t_data *data)

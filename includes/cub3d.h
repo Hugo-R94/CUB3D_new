@@ -31,7 +31,8 @@
 typedef struct s_data t_data;
 
 #ifdef BONUS
-	
+//button list 
+
 #define TILE_SIZE 5   // Taille de chaque case en pixels
 
 typedef struct s_tinfo
@@ -56,9 +57,9 @@ typedef struct s_button
 } t_button;
 
 extern t_button g_home_button[];
-extern t_button gmd_selector[];
-extern t_button setting_menu_button[];
-extern t_button pause_button[];
+extern t_button g_gmd_selector[];
+extern t_button g_setting_menu_button[];
+extern t_button g_pause_button[];
 extern t_button g_death_menu[];
 extern t_button g_win_screen[];
 
@@ -80,6 +81,14 @@ typedef enum e_page_id
 	WIN_PG,
 }	t_page_id;
 
+typedef struct s_param
+{
+	t_data	*data;
+	t_img	*dest;
+	t_txt	*layer;
+	float	factor;
+	int		offset[2];
+}	t_param;
 
 typedef enum e_texture_id
 {
@@ -118,6 +127,12 @@ typedef struct s_pl
 	int		chainsaw_offset;
 	int		is_alive;
 }	t_pl;
+
+typedef struct {
+
+    int x, y;
+
+} t_point;
 
 typedef struct s_room 
 {
@@ -258,7 +273,6 @@ typedef struct s_data
 	t_mouse	mouse;
 	int		hud_key_pressed;
 	int		pos_y_hud;
-	int timer;
 	int		win_op;
 	int		tilt;
 	int		door_state;
@@ -314,6 +328,8 @@ void free_data_mand(t_data *data);
 void print_image_window_simple(t_data *data, const char *path, int x, int y);
 void	upscale(t_data *data);
 void mlx_game_loop(t_data *data);
+void	handle_movement(t_data *data);
+void	handle_rotation(t_data *data);
 void get_player_original_pos(t_data  *data);
 void	mouv_player(t_data *data);
 int check_open_door_collision(t_data *data, float x, float y, float r);
@@ -361,21 +377,65 @@ void	draw_ceiling_img(t_data *data);
 void draw_ceiling_to_screen(t_data *data);
 void	free_map_content(t_data *data, t_map *map);
 void	free_map_struct(t_data *data, t_map *map);
+void	update_head_bob(t_data *data, int *up);
 void	clean_exit_mand(t_data *data);
 void setup_player_exit(char **map, int map_w, int map_h);
 void print_map(char **map);
 void draw_rays(t_data *data, int offset_x, int offset_y);
+int is_valid_pos(int x, int y, int map_w, int map_h);
+void fill_map_row(char *row, int map_w);
+char **alloc_map(int map_w, int map_h);
+int is_valid(int pos[2], char **map, int **visited, int params[2]);
+int **init_distance_grid(int map_w, int map_h);
+void init_directions(int dirs[4][2]);
+void process_neighbors(char **map, int **dist, t_point *queue, int params[4]);
+void flood_fill(char **map, int **dist, t_point *queue, int params[4]);
+int find_player_pos(char **map, int map_w, int map_h, int *pos);
+void find_farthest_point(int **dist, int map_w, int map_h, int *exit);
+void setup_player_exit(char **map, int map_w, int map_h);
+void fill_room_borders(char **map, t_room *room, int params[4]);
+void place_enemies(char **map, t_room *room);
+t_room create_room(char **map, int pos[2], int wh[2], int params[2]);
+void carve_tile(char **map, int pos[2], int map_w, int map_h);
+void carve_horizontal(char **map, int *coords, int params[2]);
+void carve_vertical(char **map, int *coords, int params[2]);
+void create_corridor(char **map, t_room r1, t_room r2, int params[2]);
+int try_place_room(char **map, t_room *rooms, int params[4]);
+char **generate_map(int map_w, int map_h);
+char **make_map(t_data *data);
 void	mouv_player(t_data *data);
 void	draw_game_mode(t_data	*data);
 void draw_mobs(t_data *data);
 int		check_collision(t_data *data, float pos[2], float r, char c);
+int	handle_mouse_move(int x, int y, t_data *data);
+void	calculate_fps(long *prev, float *fps, long current);
+void	cap_framerate(t_data *data, long elapsed);
+void	render_scene(t_data *data);
+int	render_frame(t_data *data);
+void	setup_hooks(t_data *data);
+void	mlx_game_loop(t_data *data);
+void	handle_escape_key(t_data *data);
+void	highlight_hovered_button(t_data *data);
+void	clear_frame(t_data *data);
+int	is_valid_render_data(t_data *data);
+void	render_img(t_data *data);
+void	render_pause(t_data *data);
+void	render_home_pages(t_data *data);
+void	draw_mouse_icon(t_data *data);
+void	draw_hud(t_data *data);
+void	draw_hud_background(t_data *data);
+long	get_time_ms(void);
 char	**allocate_clone(char **map);
 char	**clone_map(char **map);
 void free_map(char **map);
 void	survivor_map(t_data *data);
 void	spawn_random_mob(t_data *data);
+void	action_key(t_data *data);
+void	handle_movement(t_data *data);
 void	new_map_random(t_data *data);
 void	check_map_ff(t_data *data, t_map *map);
+int	is_line_empty(char *line);
+char	**ft_realloc(char **map, int size);
 void	mob_path(t_data *data);
 char **make_map(t_data *data);
 void get_exit_pos(t_data *data);
@@ -391,6 +451,11 @@ int	is_valid_map(t_data *data);
 int	check_arg_and_open(int ac, char **av);
 void	draw_setting(t_data *data);
 // char **make_map(t_data *data, int level);
+void	compute_ratios(float ratios[2], t_txt *tex, int bounds[7]);
+int	get_tex_coord(int screen, int start, float ratio, int max);
+int	get_screen_x(float relative_angle, float fov);
+float	get_angle_to_sprite(t_data *data, float x, float y);
+float	calc_distance(t_data *data, float x, float y);
  int check_wall_collision(t_data *data, float x, float y, float r);
 void	create_windows(t_win *win,t_data *data);
 void	draw_death_menu(t_data	*data);
@@ -478,15 +543,13 @@ void	draw_pause_menu(t_data *data);
 void darken_image(t_img *img, float factor);
 int	is_wall_hit(t_data *data, int mx, int my);
 #ifdef BONUS
-
+void	monitor_player(t_data *data);
 void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling);
 void   render_depth(t_f_img *image);
-t_txt *find_wall_txt(t_data *data, float dist_h, float dist_v, 
-							 float ra, float rx_h, float ry_h, 
-							 float rx_v, float ry_v);
-float get_wall_x_coord(float dist_h, float dist_v,
-						float hit_x, float hit_y, float ra);
+t_txt	*find_wall_txt(t_data *data, float dist_h, float dist_v, t_raycast *ray);
 void	draw_floor(t_data *data, int x, int y_start);
+float	get_wall_x_coord(float dist_h, float dist_v,
+							float hit[2], float ra);
 void render_gameplay(t_data *data);
 void pp_depth(t_f_img *f_img);
 void animate_door(t_data *data);

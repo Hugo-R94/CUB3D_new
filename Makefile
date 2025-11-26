@@ -17,6 +17,7 @@ CLN_DIR		= $(SRC_DIR)/cleaning
 GRP_DIR		= $(SRC_DIR)/graphic
 MAP_DIR		= $(SRC_DIR)/map
 INIT_DIR	= $(SRC_DIR)/initialization
+GMP_DIR		= $(SRC_DIR)/gameplay
 KEY_DIR		= $(SRC_DIR)/key_handling
 MAND_DIR    = $(SRC_DIR)/mandatory
 BONUS_DIR   = $(SRC_DIR)/bonus
@@ -38,7 +39,6 @@ LDFLAGS     = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz
 #        SOURCES
 # ===========================
 
-
 COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(CLN_DIR)/free.c \
 				$(CLN_DIR)/free_mand.c \
@@ -47,13 +47,16 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(CHECK_DIR)/check_map_utils.c \
 				$(INIT_DIR)/init_texture.c \
 				$(INIT_DIR)/init_mob.c \
+				$(INIT_DIR)/data_mand.c \
 				$(INIT_DIR)/init_texture_bonus.c \
 				$(INIT_DIR)/windows.c \
 				$(INIT_DIR)/data.c \
 				$(KEY_DIR)/handle_key_press_bonus.c \
+				$(KEY_DIR)/handle_esc.c \
 				$(KEY_DIR)/handle_keys.c \
 				$(KEY_DIR)/handle_keys_mand.c \
 				$(KEY_DIR)/handle_mouse.c \
+				$(KEY_DIR)/handle_mouse2.c \
 				$(KEY_DIR)/highlight_button.c \
 				$(GRP_DIR)/draw_img.c \
 				$(GRP_DIR)/draw_map.c \
@@ -70,40 +73,53 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/floor_render_bonus.c \
 				$(GRP_DIR)/win_screen.c \
 				$(GRP_DIR)/draw_sprite.c \
+				$(GRP_DIR)/draw_sprite_utils.c \
 				$(GRP_DIR)/post_process.c \
 				$(GRP_DIR)/animate.c \
 				$(GRP_DIR)/exit_render.c \
 				srcs/utils/rand.c \
-				srcs/gameplay/mob.c \
-				srcs/gameplay/collision.c \
-				srcs/gameplay/wall_collision.c \
-				srcs/gameplay/shoot.c \
-				srcs/gameplay/chainsaw.c \
-				srcs/gameplay/mode.c \
-				srcs/gameplay/mode1.c \
-				srcs/gameplay/spawn_mob.c \
+				$(GMP_DIR)/mob.c \
+				$(GMP_DIR)/monitor.c \
+				$(GMP_DIR)/collision.c \
+				$(GMP_DIR)/wall_collision.c \
+				$(GMP_DIR)/shoot.c \
+				$(GMP_DIR)/mouvement.c \
+				$(GMP_DIR)/action.c \
+				$(GMP_DIR)/chainsaw.c \
+				$(GMP_DIR)/mode.c \
+				$(GMP_DIR)/mode1.c \
+				$(GMP_DIR)/spawn_mob.c \
 				$(GRP_DIR)/draw_mob.c \
-				$(GRP_DIR)/ceiling_render_bonus.c \
+				$(GRP_DIR)/compose_ceilling.c \
+				$(GRP_DIR)/draw_ceilling.c \
 				$(GRP_DIR)/wall_render_bonus.c \
 				$(GRP_DIR)/render_utils_bonus.c \
 				$(GRP_DIR)/render_utils_bonus2.c \
 				$(GRP_DIR)/draw_doors.c \
 				$(GRP_DIR)/raycasting_utils.c \
+				$(GRP_DIR)/raycasting_utils_bonus.c \
 				$(GRP_DIR)/raycasting_v.c \
-				$(GRP_DIR)/render.c \
 				$(GRP_DIR)/render_gameplay.c \
 				$(GRP_DIR)/render_mandatory.c \
 				$(GRP_DIR)/render_bonus.c \
 				$(GRP_DIR)/resize.c \
 				$(GRP_DIR)/upscale.c \
 				$(SRC_DIR)/ft_sprintf.c \
-				$(SRC_DIR)/game_loop_bonus.c \
+				$(GMP_DIR)/game_loop_bonus.c \
+				$(GMP_DIR)/game_loop_bonus2.c \
+				$(GMP_DIR)/game_loop_bonus3.c \
 				$(MAP_DIR)/get_map.c \
 				$(MAP_DIR)/get_map_utils.c \
+				$(MAP_DIR)/get_map_utils2.c \
 				$(MAP_DIR)/get_player_pos.c \
-				$(MAP_DIR)/map_generator2.c \
 				$(MAP_DIR)/map_generator.c \
+				$(MAP_DIR)/map_room.c \
+				$(MAP_DIR)/map_ff.c \
+				$(MAP_DIR)/map_alloc.c \
+				$(MAP_DIR)/map_corridor.c \
+				$(MAP_DIR)/map_player_exit.c \
 				$(MAP_DIR)/map_generator_utils.c \
+				$(MAP_DIR)/map_generator_utils2.c \
 				$(MAP_DIR)/reparse.c \
 				$(MAP_DIR)/reparse_utils.c 
 

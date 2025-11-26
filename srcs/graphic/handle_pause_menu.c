@@ -6,21 +6,23 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 17:31:16 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/21 15:31:52 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 12:26:40 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
 #ifdef BONUS
+
 void	resume(t_data *data);
 void	go_main_menu(t_data *data);
 
-t_button pause_button[] = 
-{
-	{170, 150, 300, 75, "button", resume},
-	{170, 255, 300, 75, "button", go_setting_menu},
-	{170, 360, 300, 75, "button MENU", go_main_menu},
-	{0, 0, 0, 0, NULL, NULL}
+t_button	g_pause_button[]
+	= {
+{170, 150, 300, 75, "button", resume},
+{170, 255, 300, 75, "button", go_setting_menu},
+{170, 360, 300, 75, "button MENU", go_main_menu},
+{0, 0, 0, 0, NULL, NULL}
 };
 
 void	resume(t_data *data)
@@ -64,7 +66,6 @@ void	darken_image(t_img *img, float factor)
 
 void	draw_pause_menu(t_data *data)
 {
-	
 	put_string_to_img(data, (int []){195, 100}, 0xFF0000, "PAUSE MENU");
 	draw_rect(data, (int []){170, 150}, (int []){300, 75}, 0xFF0000);
 	put_string_to_img(data, (int []){245, 175}, 0xFF0000, "RESUME");

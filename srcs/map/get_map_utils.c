@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_map_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 11:57:27 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/10/29 12:28:30 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/25 15:14:01 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ void	print_map(char **map)
 	int	x;
 
 	y = -1;
-	while (map[++y]) // boucle jusqu’à fin du tableau de lignes
+	while (map[++y])
 	{
 		x = -1;
-		while (map[y][++x]) // boucle jusqu’à fin de la ligne
+		while (map[y][++x])
 		{
 			if (map[y][x] == '0')
 				printf("%s%c%s", GRN, map[y][x], RESET);
@@ -90,4 +90,3 @@ void	print_map(char **map)
 		printf("\n");
 	}
 }
-

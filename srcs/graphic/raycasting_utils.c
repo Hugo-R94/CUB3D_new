@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:12:32 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/24 15:30:43 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 13:48:23 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,42 +21,8 @@ int	is_valid_map(t_data *data)
 	}
 	return (1);
 }
-#ifdef BONUS 
 
-int	is_wall_hit(t_data *data, int mx, int my)
-{
-	if (!is_valid_map(data))
-		return (0);
-	if (my < 0 || my >= data->map->height)
-		return (0);
-	if (mx < 0 || mx >= (int)ft_strlen(data->map->map[my]))
-		return (0);
-	return (data->map->map[my][mx] == '1' || data->map->map[my][mx] == '2'
-		|| data->map->map[my][mx] == '3'); 
-}
-int is_door_hit(t_data *data, int mx, int my)
-{
-	if (!is_valid_map(data))
-		return (0);
-	if (my < 0 || my >= data->map->height)
-		return (0);
-	if (mx < 0 || mx >= (int)ft_strlen(data->map->map[my]))
-		return (0);
-	return (data->map->map[my][mx] == 'L' || data->map->map[my][mx] == 'D');
-}
-
-int is_mob(t_data *data, int mx, int my)
-{
-	if (!is_valid_map(data))
-		return (0);
-	if (my < 0 || my >= data->map->height)
-		return (0);
-	if (mx < 0 || mx >= (int)ft_strlen(data->map->map[my]))
-		return (0);
-	return (data->map->map[my][mx] == 'M');
-}
-
-#else 
+#ifndef BONUS
 
 int	is_wall_hit(t_data *data, int mx, int my)
 {
@@ -69,6 +35,7 @@ int	is_wall_hit(t_data *data, int mx, int my)
 	return (data->map->map[my][mx] == '1');
 }
 #endif
+
 float	normalize_angle(float angle)
 {
 	while (angle < 0)

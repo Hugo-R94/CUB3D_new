@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:38:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/24 16:35:35 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/25 15:25:38 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,6 @@ void	clean_windows(t_win *win)
 		mlx_destroy_display(win->mlx);
 	free(win->mlx);
 	free(win);
-}
-
-void	free_ledata(t_map *data)
-{
-	int	i;
-
-	if (!data)
-		return ;
-	i = 0;
-	while (i < 4)
-	{
-		free(data->textures[i].path);
-		i++;
-	}
-	free_tab(data->map);
-	free(data);
 }
 
 #ifdef BONUS

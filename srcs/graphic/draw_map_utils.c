@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:24:09 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/24 15:21:00 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 11:09:15 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	is_player(char c)
 		return (1);
 	return (0);
 }
+
 int	get_color_map(char c)
 {
 	if (c == '0' || c == 'D' || c == 'M' || is_player(c))
@@ -71,26 +72,24 @@ void	draw_player(t_data *data, int offset_x, int offset_y)
 
 #ifdef BONUS 
 
-void    draw_rays_on_minimap(t_data *data, int offset_x, int offset_y)
+void	draw_rays_on_minimap(t_data *data, int offset_x, int offset_y)
 {
-    int     i;
-    float   x[2];
-    float   y[2];
-    
-    if (!data->raycast_f)
-        return;
-    
-    i = 0;
-    while (i < 640)
-    {
-        x[0] = offset_x + data->player.px * TILE_SIZE;
-        x[1] = offset_x + data->raycast_f[i].rx * TILE_SIZE;
-        y[0] = offset_y + data->player.py * TILE_SIZE;
-        y[1] = offset_y + data->raycast_f[i].ry * TILE_SIZE;
-        draw_line(data->win, x, y, 0x00FF00);
-        i++;  // Vous pouvez augmenter le pas (i += 5) pour moins de rayons
-    }
-}
+	int		i;
+	float	x[2];
+	float	y[2];
 
+	if (!data->raycast_f)
+		return ;
+	i = 0;
+	while (i < 640)
+	{
+		x[0] = offset_x + data->player.px * TILE_SIZE;
+		x[1] = offset_x + data->raycast_f[i].rx * TILE_SIZE;
+		y[0] = offset_y + data->player.py * TILE_SIZE;
+		y[1] = offset_y + data->raycast_f[i].ry * TILE_SIZE;
+		draw_line(data->win, x, y, 0x00FF00);
+		i++;
+	}
+}
 
 #endif

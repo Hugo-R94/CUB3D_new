@@ -6,91 +6,84 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:58:14 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/24 16:00:12 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 13:38:28 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-uint32_t darken_color2(uint32_t color, float depth)
+#ifdef BONUS
+
+uint32_t	pp_px_depth(uint32_t color, float depth)
 {
-	uint8_t r, g, b;
-	float   factor;
-	
-	if (depth < 0.0f)
-		depth = 0.0f;
-	if (depth > 1.0f)
-		depth = 1.0f;
-	
-	factor = 1.0f - depth;
-	
+	float		factor;
+	uint8_t		r;
+	uint8_t		g;
+	uint8_t		b;
+	float		dark;
+
+	if (depth <= 0)
+		return (color);
+	factor = depth * depth / 100.0f;
+	if (factor > 1.0f)
+		factor = 1.0f;
+	if (factor < 0.0f)
+		factor = 0.0f;
+	dark = 1.0f - factor;
 	r = (color >> 16) & 0xFF;
 	g = (color >> 8) & 0xFF;
 	b = color & 0xFF;
-	
-	r = (uint8_t)(r * factor);
-	g = (uint8_t)(g * factor);
-	b = (uint8_t)(b * factor);
-	
+	r = (uint8_t)(r * dark);
+	g = (uint8_t)(g * dark);
+	b = (uint8_t)(b * dark);
 	return ((r << 16) | (g << 8) | b);
 }
 
-float pp_px_depth(uint32_t color, float depth)
+static void	apply_depth_effect_pixel(t_f_img *f_img, int i, float center_y)
 {
-    float factor;
-    
-    if (depth <= 0)
-        return color;
-    
-    factor = depth * depth / 100.0f;
-    if (factor > 1.0f)
-        factor = 1.0f;
-    
-    return (darken_color2(color, factor));
+	int		y;
+	float	offset_y;
+	float	adjusted_depth;
+	t_px	*px;
+
+	px = &f_img->pixels[i];
+	if (px->depth < 0)
+		return ;
+	if (px->type == PX_MOB && px->color != 0xFF0000)
+	{
+		y = i / f_img->width;
+		offset_y = (y - center_y) * 0.03f;
+		adjusted_depth = sqrtf(px->depth * px->depth
+				+ offset_y * offset_y);
+		px->color = pp_px_depth(px->color, adjusted_depth);
+	}
+	else
+		px->color = pp_px_depth(px->color, px->depth);
+	if (px->color == 0x000000)
+		px->color = 0x000001;
 }
 
-void pp_depth(t_f_img *f_img)
+void	pp_depth(t_f_img *f_img)
 {
-	int i;
-	int x;
-	int y;
-	float center_y;
-	float offset_y;
-	float adjusted_depth;
-	float vertical_scale;
-	
+	float	center_y;
+	int		i;
+
+	if (!f_img)
+		return ;
 	center_y = f_img->height / 2.0f;
-	vertical_scale = 0.03f;
 	i = 0;
 	while (i < f_img->height * f_img->width)
 	{
-		if (f_img->pixels[i].depth >= 0)
-		{
-			if (f_img->pixels[i].type == PX_MOB && f_img->pixels[i].color != 0xFF0000)
-			{
-				y = i / f_img->width;
-				offset_y = (y - center_y) * vertical_scale;
-				adjusted_depth = sqrtf(f_img->pixels[i].depth * f_img->pixels[i].depth 
-									  + offset_y * offset_y);
-				f_img->pixels[i].color = pp_px_depth(f_img->pixels[i].color, 
-													  adjusted_depth);
-			}
-			else 
-		 		f_img->pixels[i].color = pp_px_depth(f_img->pixels[i].color, 
-												   f_img->pixels[i].depth);	
-		}
-		if (f_img->pixels[i].color == 0x000000)
-			f_img->pixels[i].color = 0x000001;
+		apply_depth_effect_pixel(f_img, i, center_y);
 		i++;
 	}
 }
 
 void	render_px_type(t_f_img *f_img)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	// printf("renderpxtype\n");
 	while (i < f_img->height * f_img->width)
 	{
 		if (f_img->pixels[i].type == PX_MOB)
@@ -105,10 +98,9 @@ void	render_px_type(t_f_img *f_img)
 
 void	render_px_type_mob(t_f_img *f_img)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	// printf("renderpxtype\n");
 	while (i < f_img->height * f_img->width)
 	{
 		if (f_img->pixels[i].type == PX_MOB)
@@ -116,3 +108,5 @@ void	render_px_type_mob(t_f_img *f_img)
 		i++;
 	}
 }
+
+#endif

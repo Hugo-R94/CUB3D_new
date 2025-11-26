@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 16:20:26 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/25 11:54:59 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 14:32:07 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 #ifdef BONUS
 
-t_button g_no_button[] =
-{
-	{0, 0, 0, 0, NULL, NULL}
+t_button	g_no_button[]
+	= {
+{0, 0, 0, 0, NULL, NULL}
 };
 
 void	render_hud_still(t_data *data)
@@ -40,50 +40,43 @@ void	render_hud_still(t_data *data)
 	hp = ft_itoa(data->player_hp);
 	put_string_to_img(data, pos, 0xFF0000, hp);
 	free(hp);
-	draw_mini_map_centered(data, 75, 5, (int[]){450, data->pos_y_hud + 250});
- }
-
-void draw_hand_pl(t_data *data)
-{
-	draw_to_img(data,"aim", 308, 178);
-	if (data->player.is_shooting)
-		draw_to_img(data, "shot", 380, 180 + (data->player.pl_height * 1.2));
-	if(!data->player.shoot_reload)
-		draw_to_img(data,"hand_right", 400, 200 + (data->player.pl_height * 1.2));
-	draw_to_img(data,"hand_left", -125 + data->player.chainsaw_offset, 225 - (data->player.pl_height * 1.2) - data->player.chainsaw_offset);
+	draw_mini_map_centered(data, 75, 5, (int []){450, data->pos_y_hud + 250});
 }
 
-
-
-
-void draw_final_image(t_data *data, int pos_x, int pos_y)
+void	draw_final_image(t_data *data, int pos_x, int pos_y)
 {
-	t_f_img *fimg;
-	int x, y;
-	int index;
-	
+	t_f_img	*fimg;
+	int		x;
+	int		y;
+	int		index;
+
 	if (!data || !data->render_gmp || !data->render_gmp->pixels)
-		return;
+		return ;
 	fimg = data->render_gmp;
-	for (y = 0; y < fimg->height; y++)
+	y = -1;
+	while (++y < fimg->height)
 	{
-		for (x = 0; x < fimg->width; x++)
+		x = -1;
+		while (++x < fimg->width)
 		{
 			index = y * fimg->width + x;
-			
-			if ((pos_x + x) < 0 || (pos_x + x) >= data->win->img->width ||
-				(pos_y + y) < 0 || (pos_y + y) >= data->win->img->height)
-				continue;
-			
-			put_pixel(data->win->img, pos_x + x, pos_y + y, fimg->pixels[index].color);
+			if ((pos_x + x) < 0 || (pos_x + x) >= data->win->img->width
+				|| (pos_y + y) < 0 || (pos_y + y) >= data->win->img->height)
+				continue ;
+			put_pixel(data->win->img, pos_x + x, pos_y + y,
+				fimg->pixels[index].color);
 		}
 	}
 }
 
-void clear_render_gmp(t_f_img *render)
+void	clear_render_gmp(t_f_img *render)
 {
-	int total = render->width * render->height;
-	for (int i = 0; i < total; i++)
+	int	total;
+	int	i;
+
+	total = render->width * render->height;
+	i = -1;
+	while (++i < total)
 	{
 		render->pixels[i].color = 0x000000;
 		render->pixels[i].depth = -1;
@@ -91,15 +84,25 @@ void clear_render_gmp(t_f_img *render)
 	}
 }
 
-void monitor_player(t_data *data)
+void	render_ingame(t_data *data)
 {
-	if (data->player_hp <= 0)
-	{
-		data->current_buttons = g_death_menu;
-		data->current_pg = DEATH_PG;
-	}
-	if (check_collision(data, (float []){data->player.px, data->player.py}, 0.1f, 'X'))
-		data->current_pg = WIN_PG;
+	int	cx;
+	int	cy;
+	int	index;
+
+	mob_path(data);
+	mouv_player(data);
+	draw_ceiling_img(data);
+	animate_door(data);
+	render_gameplay(data);
+	pp_depth(data->render_gmp);
+	cx = data->render_gmp->width / 2;
+	cy = data->render_gmp->height / 2;
+	index = cy * data->render_gmp->width + cx;
+	spawn_random_mob(data);
+	shooting(data);
+	use_chainsaw(data);
+	knockback(data);
 }
 
 void	render_gameplay_full(t_data *data)
@@ -109,24 +112,16 @@ void	render_gameplay_full(t_data *data)
 		data->game_on = 1;
 	data->in_game = 1;
 	if (data->game_on)
-	{
-		clear_render_gmp(data->render_gmp);
-		mob_path(data);
-		mouv_player(data);
-		draw_ceiling_img(data);
-		animate_door(data);
-		render_gameplay(data);
-		pp_depth(data->render_gmp);
-		int cx = data->render_gmp->width / 2;
-		int cy = data->render_gmp->height / 2;
-		int index = cy * data->render_gmp->width + cx;
-		spawn_random_mob(data);
-		shooting(data);
-		use_chainsaw(data);
-		knockback(data);
-	}
-	draw_final_image(data,0,0);
-	draw_hand_pl(data);
+		render_ingame(data);
+	draw_final_image(data, 0, 0);
+	draw_to_img(data, "aim", 308, 178);
+	if (data->player.is_shooting)
+		draw_to_img(data, "shot", 380, 180 + (data->player.pl_height * 1.2));
+	if (!data->player.shoot_reload)
+		draw_to_img(data, "hand_right", 400, 200
+			+ (data->player.pl_height * 1.2));
+	draw_to_img(data, "hand_left", -125 + data->player.chainsaw_offset,
+		225 - (data->player.pl_height * 1.2) - data->player.chainsaw_offset);
 	is_player_hit(data);
 	render_hud_still(data);
 	monitor_player(data);

@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:17:48 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/25 13:26:42 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/25 15:00:34 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void	init_data_part2(t_data *data)
 	data->player.rot_speed = (data->res_x * 0.000009375) * 10;
 	data->player.mouv_speed = (data->res_x * 0.00003125) * 5;
 	data->win_op = 1;
-	data->timer = 0;
 	data->player.bullet_count = 0;
 	data->player.shoot_reload = 1;
 	data->player.shoot_reload_timer = 15;

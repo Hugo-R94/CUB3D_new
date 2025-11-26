@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:19:27 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/24 14:24:08 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 17:24:53 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 #ifdef BONUS
 
-t_button g_win_screen[] = 
-{
-	{214 , 125, 213, 75, "retry", retry_game},
-	{214 , 225, 213, 75, "menu", play_mainmenu},
-	{214 , 325, 213, 75, "exit", clear_and_exit},
-	{0, 0, 0, 0, NULL, NULL}
+t_button	g_win_screen[]
+	= {
+{214, 125, 213, 75, "retry", retry_game},
+{214, 225, 213, 75, "menu", play_mainmenu},
+{214, 325, 213, 75, "exit", clear_and_exit},
+{0, 0, 0, 0, NULL, NULL}
 };
 
-void draw_win_screen(t_data *data)
+void	draw_win_screen(t_data *data)
 {
 	render_gameplay_full(data);
 	data->game_on = 0;

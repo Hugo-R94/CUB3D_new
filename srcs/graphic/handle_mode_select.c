@@ -6,27 +6,27 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 11:15:32 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/24 15:40:33 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 12:23:50 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
 #ifdef BONUS
-void do_nothing(t_data *data);
+
+void	do_nothing(t_data *data);
 
 //le deuxieme bouton bug donc jai mis un bouton inutile en dehors de la fenetre
-t_button	gmd_selector[] =
-{
-	{98, 92, 200, 125, "gamemode_mandatory", play_mandatory},
-	{800,800,0,0,"fix", do_nothing},
-	{342, 92, 200, 125, "gamemode_endless", play_endless_mode},
-	// {320,50, 200, 125, "new_button", play_mandatory},
-	{98, 262, 200, 125, "gamemode_survivor", play_survivor_mode},
-	{342, 262, 200, 125, "gamemode_mainmenu", play_survivor_mode},
-	{270, 410, 100, 50, "main menu", play_mainmenu},
-	{0, 0, 0, 0, NULL, NULL}
+t_button	g_gmd_selector[]
+	= {
+{98, 92, 200, 125, "gamemode_mandatory", play_mandatory},
+{800, 800, 0, 0, "fix", do_nothing},
+{342, 92, 200, 125, "gamemode_endless", play_endless_mode},
+{98, 262, 200, 125, "gamemode_survivor", play_survivor_mode},
+{342, 262, 200, 125, "gamemode_mainmenu", play_survivor_mode},
+{270, 410, 100, 50, "main menu", play_mainmenu},
+{0, 0, 0, 0, NULL, NULL}
 };
-
 
 void	draw_game_mode(t_data	*data)
 {

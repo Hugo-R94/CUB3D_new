@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:13:36 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/24 15:33:03 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/25 14:23:36 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	render_frame_mandatory(t_data *data)
 
 	frame_time_us = 33333;
 	gettimeofday(&st, NULL);
-	mouv_player(data);
+	handle_rotation(data);
+	handle_movement(data);
 	draw_walls_3d(data);
 	gettimeofday(&end, NULL);
 	elapsed = (end.tv_sec - st.tv_sec) * 1000000L + (end.tv_usec - st.tv_usec);

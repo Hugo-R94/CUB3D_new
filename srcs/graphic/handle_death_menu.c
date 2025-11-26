@@ -6,25 +6,23 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:11:12 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/24 15:50:30 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 17:51:55 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
 #ifdef BONUS 
-void retry_game(t_data *data);
 
-t_button	g_death_menu[] =
-{
-	{214 , 125, 213, 75, "retry", retry_game},
-	{214 , 225, 213, 75, "menu", play_mainmenu},
-	{214 , 325, 213, 75, "exit", clear_and_exit},
-	{0, 0, 0, 0, NULL, NULL}
+void	retry_game(t_data *data);
+
+t_button	g_death_menu[]
+	= {
+{214, 125, 213, 75, "retry", retry_game},
+{214, 225, 213, 75, "menu", play_mainmenu},
+{214, 325, 213, 75, "exit", clear_and_exit},
+{0, 0, 0, 0, NULL, NULL}
 };
-
-
-
 
 void	draw_death_menu(t_data	*data)
 {

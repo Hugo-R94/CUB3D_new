@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 12:08:14 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/24 15:22:30 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/26 11:10:31 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,33 +78,33 @@ static int	is_tile_visible(int pixel[2], int center[2],
 	return (dist_sq <= radius * radius - (thickness * 125));
 }
 
-static void draw_map_tiles(t_data *data, int center[2], int params[2])
+static void	draw_map_tiles(t_data *data, int center[2], int params[2])
 {
-    int i;
-    int j;
-    int pixel_x;
-    int pixel_y;
-    int color;
+	int	i;
+	int	j;
+	int	pixel_x;
+	int	pixel_y;
+	int	color;
 
-    i = -1;
-    while (data->map->map[++i] && i < data->map->height)  // Ajoute limite height
-    {
-        j = -1;
-        while (data->map->map[i][++j] && j < data->map->width)  // Ajoute limite width
-        {
-            pixel_x = center[0] + (j * TILE_SIZE
-                - data->player.px * TILE_SIZE);
-            pixel_y = center[1] + (i * TILE_SIZE
-                - data->player.py * TILE_SIZE);
-            if (is_tile_visible((int []){pixel_x, pixel_y},
-                (int []){center[0], center[1]}, params[0], params[1]))
-            {
-                color = get_color_map(data->map->map[i][j]);
-                if (color != 0x000000)
-                    draw_tile(data->win, pixel_x, pixel_y, color);
-            }
-        }
-    }
+	i = -1;
+	while (data->map->map[++i] && i < data->map->height)
+	{
+		j = -1;
+		while (data->map->map[i][++j] && j < data->map->width)
+		{
+			pixel_x = center[0] + (j * TILE_SIZE
+					- data->player.px * TILE_SIZE);
+			pixel_y = center[1] + (i * TILE_SIZE
+					- data->player.py * TILE_SIZE);
+			if (is_tile_visible((int []){pixel_x, pixel_y},
+				(int []){center[0], center[1]}, params[0], params[1]))
+			{
+				color = get_color_map(data->map->map[i][j]);
+				if (color != 0x000000)
+					draw_tile(data->win, pixel_x, pixel_y, color);
+			}
+		}
+	}
 }
 #ifdef BONUS 
 
@@ -123,11 +123,9 @@ void	draw_mini_map_centered(t_data *data, int radius, int thickness,
 	draw_map_tiles(data, center, params);
 	draw_circle(data, (int []){center[0], center[1], radius, thickness},
 		0xFCA612);
-	// draw_rays_on_minimap(data,center[0] - data->player.px * TILE_SIZE,
-	// 		 center[1] - data->player.py * TILE_SIZE);
 	draw_player(data, center[0] - data->player.px * TILE_SIZE,
 		center[1] - data->player.py * TILE_SIZE);
 	draw_rays_3d_bonus(data, center[0] - data->player.px * TILE_SIZE,
-			center[1] - data->player.py * TILE_SIZE);
+		center[1] - data->player.py * TILE_SIZE);
 }
 #endif

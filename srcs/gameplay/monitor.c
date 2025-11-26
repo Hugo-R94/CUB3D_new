@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_render.c                                      :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/24 12:57:18 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/26 12:12:29 by hugz             ###   ########.fr       */
+/*   Created: 2025/11/26 14:29:59 by hugz              #+#    #+#             */
+/*   Updated: 2025/11/26 14:30:18 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,16 @@
 
 #ifdef BONUS
 
-void	draw_exit(t_data *data)
+void	monitor_player(t_data *data)
 {
-	draw_sprite(data, (float []){data->xx, data->xy}, "exit", 1.5f);
+	if (data->player_hp <= 0)
+	{
+		data->current_buttons = g_death_menu;
+		data->current_pg = DEATH_PG;
+	}
+	if (check_collision(data, (float []){data->player.px, data->player.py},
+		0.1f, 'X'))
+		data->current_pg = WIN_PG;
 }
 
 #endif

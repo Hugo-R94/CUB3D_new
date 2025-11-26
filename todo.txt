@@ -1,39 +1,4 @@
-integrer et faire fonctionner avec une nouvelle structure 
-
-- dans t_data 
-{
-	{reste de la structure};
-	t_f_img	final_img;
-}
-
-typedef enum e_px_type
-{
-	MOB,
-	DOOR,
-	WALL,
-	ITEM
-} t_px_type;
-
-t_px 
-{
-	uint32	color;
-	int 	depth; //de 0 a 100000
-	t_type	type; //defini de quel type est le pixel pour les priorite de reecriture.
-	int 	mob_id; //identifie le mob pour les degats.
-}
-
-
-t_f_img 
- {
-	t_px	*pixel;
-	t_img 	img;
-
- }
-
- grace a cette structure je centralise l'image et l'ecriture
- je peux separer les fonctions decriture et connaitre les priorite grace au t_type;
- je peux proceder a un post traitement grace a la depth; (limite l operation au pixel finaux)
- je peux stoper le rendu de l'img pendant la pause.
- permettra aussi la reecriture de plusieurs element supperpose ( check if color == 0x000000 && px.type == same type then put pixel)
- ->ne pas limiter le rendu des monstre et portes a la premiere rencontrer. (tracer le rendu jusqua la limite de vision)
-type permets aussi de faire une hitbox facile (if (tir == 1 && px.type == mob) then 1st mob on ray.hp -= 1;)
+#skip norme = 
+	draw_mob
+	DOOR
+	render floor
