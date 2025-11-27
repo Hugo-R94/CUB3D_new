@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_gameplay.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 16:20:26 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/27 13:32:43 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 14:58:21 by hrouchy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	clear_render_gmp(t_f_img *render)
 	}
 }
 
+// spawn_random_mob(data);
 void	render_ingame(t_data *data)
 {
 	mob_path(data);
@@ -92,7 +93,6 @@ void	render_ingame(t_data *data)
 	animate_door(data);
 	render_gameplay(data);
 	pp_depth(data->render_gmp);
-	spawn_random_mob(data);
 	shooting(data);
 	use_chainsaw(data);
 	knockback(data);
