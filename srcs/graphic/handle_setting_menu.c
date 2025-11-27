@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 11:43:03 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 13:02:36 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 14:01:05 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,6 @@ t_button	g_setting_menu_button[]
 {0, 0, 0, 0, NULL, NULL}
 };
 
-void	resize_640(t_data *data)
-{
-	resize_window(data, 640, 480);
-}
-
-void	resize_1280(t_data *data)
-{
-	resize_window(data, 1280, 960);
-}
-
-void	resize_1920(t_data *data)
-{
-	resize_window(data, 1920, 1440);
-}
-
-void	resize_fullscreen(t_data *data)
-{
-	int	screen_w;
-	int	screen_h;
-
-	mlx_get_screen_size(data->win->mlx, &screen_w, &screen_h);
-	resize_window(data, screen_w, screen_h);
-}
-
 void	back_to_main(t_data *data)
 {
 	if (data->in_game == 0)
@@ -66,16 +42,6 @@ void	back_to_main(t_data *data)
 		data->current_pg = PAUSE_PG;
 		data->current_buttons = g_pause_button;
 	}
-}
-
-void	set_fov(t_data *data)
-{
-	data->slider_button1 = 1;
-}
-
-void	set_sensi(t_data *data)
-{
-	data->slider_button2 = 1;
 }
 
 void	choose_res(t_data *data)

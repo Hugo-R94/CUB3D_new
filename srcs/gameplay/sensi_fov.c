@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_keys.c                                      :+:      :+:    :+:   */
+/*   sensi_fov.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 11:40:00 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/27 14:05:51 by hugz             ###   ########.fr       */
+/*   Created: 2025/11/27 14:01:08 by hugz              #+#    #+#             */
+/*   Updated: 2025/11/27 14:01:22 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 #ifdef BONUS
 
-int	handle_close(void *param)
+void	set_fov(t_data *data)
 {
-	t_data	*data;
-
-	data = (t_data *)param;
-	clear_and_exit(data);
-	return (0);
+	data->slider_button1 = 1;
 }
 
-#else
-
-int	handle_close(void *param)
+void	set_sensi(t_data *data)
 {
-	t_data	*data;
-
-	data = (t_data *)param;
-	clean_exit_mand(data);
-	return (0);
+	data->slider_button2 = 1;
 }
 
 #endif

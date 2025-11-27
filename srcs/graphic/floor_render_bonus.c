@@ -6,14 +6,13 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:37:41 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 17:29:32 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 14:10:54 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
 #ifdef BONUS
-
 /* --- Calcule la distance au sol pour une ligne y donnée --- */
 static float	get_row_distance(int y, double tilt)
 {
@@ -21,12 +20,12 @@ static float	get_row_distance(int y, double tilt)
 	double	pos_z;
 	double	row_dist;
 
-	p = (y - (240 + tilt));
-	if (p == 0)
-		p = 1;
-	pos_z = 240.0;
+	p = y - (480 / 2.0 + tilt);
+	if (fabs(p) < 0.001)
+		return (1000.0);
+	pos_z = 480 / 2.0;
 	row_dist = pos_z / p;
-	return (row_dist);
+	return (fabs(row_dist));
 }
 
 /* --- Calcule la direction du rayon pour la colonne x --- */
@@ -38,7 +37,7 @@ static void	get_ray_dir(double *ray_x, double *ray_y, t_data *data, int x)
 	double	plane_x;
 	double	plane_y;
 
-	camera_x = 2.0 * x / 640.0 - 1.0;
+	camera_x = 2.0 * x / (double)640 - 1.0;
 	dir_x = cos(data->player.pa);
 	dir_y = sin(data->player.pa);
 	plane_x = -sin(data->player.pa) * tan(data->fov / 2);
@@ -48,25 +47,30 @@ static void	get_ray_dir(double *ray_x, double *ray_y, t_data *data, int x)
 }
 
 /* --- Calcule la position monde du point du sol --- */
-static void	get_floor_pos(double *fx, double *fy, t_data *data, double *ray)
-{
-	double	row_dist;
-
-	row_dist = ray[2];
-	*fx = data->player.px + row_dist * ray[0];
-	*fy = data->player.py + row_dist * ray[1];
-}
 
 /* --- Convertit position monde en coordonnées de texture --- */
-static void	get_tex_coords(int *tex_x, int *tex_y, double *floor, t_img *img)
+static void	get_tex_coords(int *tex_x, int *tex_y,
+	double *floor_pos, t_img *img)
 {
-	int	cell_x;
-	int	cell_y;
+	double	fx;
+	double	fy;
+	int		cell_x;
+	int		cell_y;
 
-	cell_x = (int)floor[0];
-	cell_y = (int)floor[1];
-	*tex_x = (int)(img->width * (floor[0] - cell_x)) & (img->width - 1);
-	*tex_y = (int)(img->height * (floor[1] - cell_y)) & (img->height - 1);
+	cell_x = (int)floor_pos[0];
+	cell_y = (int)floor_pos[1];
+	fx = floor_pos[0] - cell_x;
+	fy = floor_pos[1] - cell_y;
+	if (fx < 0)
+		fx += 1.0;
+	if (fy < 0)
+		fy += 1.0;
+	*tex_x = (int)(fx * img->width);
+	*tex_y = (int)(fy * img->height);
+	if (*tex_x >= img->width)
+		*tex_x = img->width - 1;
+	if (*tex_y >= img->height)
+		*tex_y = img->height - 1;
 }
 
 static void	draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
@@ -83,6 +87,8 @@ static void	draw_floor_pix(t_data *data, int x, int y, t_txt *floor)
 		return ;
 	get_ray_dir(&ray[0], &ray[1], data, x);
 	ray[2] = get_row_distance(y, data->tilt + data->player.pl_height);
+	if (ray[2] > 1000.0)
+		return ;
 	get_floor_pos(&floor_pos[0], &floor_pos[1], data, ray);
 	get_tex_coords(&tex[0], &tex[1], floor_pos, &floor->img);
 	color = get_pixel(&floor->img, tex[0], tex[1]);

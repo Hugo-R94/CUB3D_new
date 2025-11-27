@@ -68,6 +68,7 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/handle_pause_menu.c \
 				$(GRP_DIR)/handle_setting_menu.c \
 				$(GRP_DIR)/raycasting.c \
+				$(GRP_DIR)/raycasting_bonus.c \
 				$(GRP_DIR)/raycasting_h.c \
 				$(GRP_DIR)/handle_death_menu.c \
 				$(GRP_DIR)/render_texture_mand.c \
@@ -95,12 +96,16 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GMP_DIR)/mode1.c \
 				$(GMP_DIR)/spawn_mob.c \
 				$(GRP_DIR)/draw_mob.c \
+				$(GRP_DIR)/draw_mob_utils.c \
 				$(GRP_DIR)/compose_ceilling.c \
 				$(GRP_DIR)/draw_ceilling.c \
 				$(GRP_DIR)/wall_render_bonus.c \
+				$(GRP_DIR)/render_bonus_utils.c \
+				$(GRP_DIR)/render_bonus_utils2.c \
 				$(GRP_DIR)/render_utils_bonus.c \
 				$(GRP_DIR)/render_utils_bonus2.c \
 				$(GRP_DIR)/draw_doors.c \
+				$(GRP_DIR)/draw_doors_utils.c \
 				$(GRP_DIR)/raycasting_utils.c \
 				$(GRP_DIR)/raycasting_utils_bonus.c \
 				$(GRP_DIR)/raycasting_v.c \
@@ -114,6 +119,8 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GMP_DIR)/game_loop_bonus.c \
 				$(GMP_DIR)/game_loop_bonus2.c \
 				$(GMP_DIR)/game_loop_bonus3.c \
+				$(GMP_DIR)/resize_func.c \
+				$(GMP_DIR)/sensi_fov.c \
 				$(MAP_DIR)/get_map.c \
 				$(MAP_DIR)/get_map_utils.c \
 				$(MAP_DIR)/get_map_utils2.c \

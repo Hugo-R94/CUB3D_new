@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 12:08:14 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 11:10:31 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:38:28 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	draw_mini_map(t_data *data, int offset_x, int offset_y)
 	draw_player(data, offset_x, offset_y);
 }
 
+#ifdef BONUS 
+
 static int	is_tile_visible(int pixel[2], int center[2],
 				int radius, int thickness)
 {
@@ -106,7 +108,6 @@ static void	draw_map_tiles(t_data *data, int center[2], int params[2])
 		}
 	}
 }
-#ifdef BONUS 
 
 void	draw_mini_map_centered(t_data *data, int radius, int thickness,
 			int pos[2])

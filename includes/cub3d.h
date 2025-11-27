@@ -12,7 +12,6 @@
 # include "../minilibx-linux/mlx_int.h"
 #include <limits.h>
 #include <math.h>
-		
 //COLORS
 #define BLK "\e[0;30m"
 #define RED "\e[0;31m"
@@ -576,6 +575,7 @@ void	monitor_player(t_data *data);
 void draw_ceiling(t_data *data, int x, int y_end, t_img *ceiling);
 void   render_depth(t_f_img *image);
 t_txt	*find_wall_txt(t_data *data, float dist_h, float dist_v, t_raycast *ray);
+// void	draw_floor(t_data *data, int x, int y_start);
 void	draw_floor(t_data *data, int x, int y_start);
 float	get_wall_x_coord(float dist_h, float dist_v,
 							float hit[2], float ra);
@@ -584,6 +584,30 @@ void pp_depth(t_f_img *f_img);
 void animate_door(t_data *data);
 int	is_wall_hit(t_data *data, int mx, int my);
 void init_mob(t_data *data);
-
+void	calculate_wall_dimensions(t_data *data, float dist_final,
+				int *line[2], int factor);
+void	get_final_distance(t_data *data, float dist[2],
+	float ra, float *dist_final);
+void	calculate_distances(t_data *data, t_raycast *raycast,
+	float *dist_h, float *dist_v);
+void	cast_doors_rays(t_data *data, t_raycast *raycast);
+void	cast_rays(t_data *data, t_raycast *raycast);
+void	get_floor_pos(double *fx, double *fy, t_data *data, double *ray);
+void	adjust_door_offset(t_column_info *c, int value[5], t_data *data);
+void	prepare_door_column(t_column_info *c,
+		int line_h, int line_off, t_img *img);
+void	adjust_column_bounds(t_column_info *c, int line_off);
+void	init_column_info(t_column_info *c, int line_h, t_img *img);
+void	store_ray_coords(t_data *data, int i,
+	t_raycast *ray, float dists[2]);
+void	render_column(t_data *data, int value[5],
+	t_txt *txt, float dist_final);
+void	get_texture_info(t_data *data, float dist[2],
+	t_raycast *raycast, t_txt **txt);
+void	draw_px_info(t_data *data, int index, int color, float *ratios);
+void	do_nothing(t_data *data);;
+void	get_mob_ratios(t_txt *tex, int *bounds, float *ratios, int x);
+float	get_relative_angle(t_data *data, int i);
+float	calculate_mob_distance(t_data *data, int i);
 #endif
 #endif
