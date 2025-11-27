@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 10:50:03 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 12:24:01 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:27:31 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,6 @@ void	go_setting_menu(t_data *data)
 
 void	draw_home_page(t_data *data)
 {
-	int	pos[2];
-
-	pos[0] = 25;
-	pos[1] = 25;
 	draw_to_img(data, "Home_bg", 0, 0);
 	draw_to_img(data, "Home_ash", 0, 0);
 	draw_to_img(data, "Home_title", 0, 0);

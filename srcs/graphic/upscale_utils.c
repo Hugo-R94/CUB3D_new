@@ -1,46 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_keys.c                                      :+:      :+:    :+:   */
+/*   upscale_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/09 11:40:00 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/27 13:27:20 by hugz             ###   ########.fr       */
+/*   Created: 2025/11/27 12:04:12 by hugz              #+#    #+#             */
+/*   Updated: 2025/11/27 12:04:57 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 #ifdef BONUS
 
-
-int	handle_close(void *param)
+unsigned int	get_pixel_up(char *img, int *vars)
 {
-	t_data	*data;
+	int	offset;
 
-	data = (t_data *)param;
-	clear_and_exit(data);
-	return (0);
+	offset = vars[1] * vars[3] + vars[0] * (vars[2] / 8);
+	return (*(unsigned int *)(img + offset));
 }
 
-#else
-
-int	handle_key(int keycode, void *param)
+void	put_pixel_up(char *img, int *vars)
 {
-	t_data	*data;
+	int	offset;
 
-	data = (t_data *)param;
-	return (0);
-}
-
-int	handle_close(void *param)
-{
-	t_data	*data;
-
-	data = (t_data *)param;
-	clean_exit_mand(data);
-	return (0);
+	offset = vars[1] * vars[4] + vars[0] * (vars[3] / 8);
+	*(unsigned int *)(img + offset) = vars[5];
 }
 
 #endif

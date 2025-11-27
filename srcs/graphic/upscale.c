@@ -6,28 +6,12 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 11:52:17 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 17:17:46 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 12:04:39 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 #ifdef BONUS
-
-static unsigned int	get_pixel_up(char *img, int *vars)
-{
-	int	offset;
-
-	offset = vars[1] * vars[3] + vars[0] * (vars[2] / 8);
-	return (*(unsigned int *)(img + offset));
-}
-
-static void	put_pixel_up(char *img, int *vars)
-{
-	int	offset;
-
-	offset = vars[1] * vars[4] + vars[0] * (vars[3] / 8);
-	*(unsigned int *)(img + offset) = vars[5];
-}
 
 static void	scale_pixel(char *dst, int *scale_v, int *dst_v)
 {

@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 13:41:51 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 17:08:17 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:31:04 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,25 +66,16 @@ char	get_wall_letter(t_data *data, float rx, float ry)
 // */
 t_txt	*find_wall_txt(t_data *data, float dist_h, float dist_v, t_raycast *ray)
 {
-	int		base_index;
 	char	wall_letter;
 	t_txt	*texture;
 
 	if (dist_h < dist_v)
 	{
 		wall_letter = get_wall_letter(data, ray->rx_h, ray->ry_h);
-		if (sin(ray->ra) > 0)
-			base_index = 1;
-		else
-			base_index = 0;
 	}
 	else
 	{
 		wall_letter = get_wall_letter(data, ray->rx_v, ray->ry_v);
-		if (cos(ray->ra) > 0)
-			base_index = 2;
-		else
-			base_index = 3;
 	}
 	texture = get_texture_by_letter(data, wall_letter);
 	if (!texture && data->txt)

@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:20:40 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 17:50:47 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:31:52 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	should_skip_pixel(t_data *data, int value[5],
 }
 
 //int col_i[0] = colors col_i[1] = index 
-static void	draw_pixel_if_valid(t_data *data, int value[5],
+static void	draw_pixel_if_valid(t_data *data,
 		unsigned int col_i[2], float depth)
 {
 	if (col_i[0] != 0xFF000000 && col_i[0] != 0x000000)
@@ -102,7 +102,7 @@ void	draw_door_column(t_data *data, int value[5], t_img *img, float depth)
 		}
 		index = value[0] + screen_y * data->render_gmp->width;
 		pixel_color = get_pixel(img, value[4], c.tex_y);
-		draw_pixel_if_valid(data, value,
+		draw_pixel_if_valid(data,
 			(unsigned int []){pixel_color, index}, depth);
 		c.tex_pos += c.step;
 	}

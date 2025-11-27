@@ -321,6 +321,13 @@ typedef struct s_data
 // 	"mettre_nom_txt_ici",
 //     NULL // marqueur de fin
 // };
+
+#ifndef BONUS
+
+void	render_column(t_data *data, t_img *img, int x[2], int full_line_h);
+t_txt	*find_wall_txt(t_data *data, float dist_h, float dist_v, float ra);
+
+#endif
  void	draw_mini_map_centered(t_data *data, int radius, int thickness, int pos[2]);
 int		is_wall(t_data *data, int x, int y);
 void	draw_circle(t_data *img, int i[4], int color);
@@ -355,7 +362,7 @@ void retry_game(t_data *data);
 void init_rand(void);
 
 char	get_player_pos(char **map, int *x, int *y);
-void	free_textures(t_data *data, t_txt *textures);
+void	free_textures(t_txt *textures);
 int get_texture_x(t_img *img, float wall_x);
 void shooting(t_data *data);
 void	copy_texture_to_img(t_img *src, t_img *dst, int pos_x, int pos_y);
@@ -379,6 +386,27 @@ void	free_map_content(t_data *data, t_map *map);
 void	free_map_struct(t_data *data, t_map *map);
 void	update_head_bob(t_data *data, int *up);
 void	clean_exit_mand(t_data *data);
+/* render_texture.c */
+int		get_texture_x(t_img *img, float wall_x);
+
+/* render_distance.c */
+void	get_distances(t_data *data, float ra, float *dist_h, float *dist_v);
+float	get_corrected_distance(t_data *data, float ra, float dist);
+int		calculate_line_height(t_data *data, float dist_final, int *full_h);
+
+/* render_wall_coords.c */
+float	get_wall_x(t_data *data, float dist[3], float ra);
+
+/* render_column_utils.c */
+int		get_line_offset(t_data *data, int full_line_h);
+float	get_initial_tex_pos(int line_off, float step);
+int		get_start_y(int line_off);
+int		get_end_y(t_data *data, int line_off, int full_line_h);
+
+/* render_column_draw.c */
+/* render_main.c */
+void	draw_wall_column_txt(t_data *data, int x, float ra);
+void	draw_walls_3d(t_data *data);
 void setup_player_exit(char **map, int map_w, int map_h);
 void print_map(char **map);
 void draw_rays(t_data *data, int offset_x, int offset_y);
@@ -537,7 +565,8 @@ void handle_key_game(t_data *data);
 
 //RENDER GAMEPLAY
 void	render_gameplay_full(t_data *data);
-
+void	put_pixel_up(char *img, int *vars);
+unsigned int	get_pixel_up(char *img, int *vars);
 //HANDLE PAUSE MENU
 void	draw_pause_menu(t_data *data);
 void darken_image(t_img *img, float factor);

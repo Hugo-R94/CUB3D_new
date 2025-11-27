@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 11:34:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/25 15:09:33 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:30:15 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	render_frame(t_data *data)
 void	setup_hooks(t_data *data)
 {
 	mlx_loop_hook(data->win->mlx, render_frame, data);
-	mlx_hook(data->win->win, 2, 1L << 0, handle_key, data);
 	mlx_hook(data->win->win, 17, 0, handle_close, data);
 	mlx_hook(data->win->win, 5, 1L << 3, handle_mouse_release, data);
 	mlx_mouse_hook(data->win->win, handle_mouse_click, data);

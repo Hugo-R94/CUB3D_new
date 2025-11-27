@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 16:20:26 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/26 14:32:07 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:32:00 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	render_ingame(t_data *data)
 {
 	int	cx;
 	int	cy;
-	int	index;
 
 	mob_path(data);
 	mouv_player(data);
@@ -98,7 +97,6 @@ void	render_ingame(t_data *data)
 	pp_depth(data->render_gmp);
 	cx = data->render_gmp->width / 2;
 	cy = data->render_gmp->height / 2;
-	index = cy * data->render_gmp->width + cx;
 	spawn_random_mob(data);
 	shooting(data);
 	use_chainsaw(data);

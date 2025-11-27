@@ -5,8 +5,8 @@
 NAME        = cub3D
 NAME_BONUS  = cub3D_bonus
 CC          = cc
-# CFLAGS      = -Wall -Wextra -Werror -g -fPIC
-CFLAGS		= -g
+CFLAGS      = -Wall -Wextra -Werror -g -fPIC
+# CFLAGS		= -g
 # ===========================
 #        DIRECTORIES
 # ===========================
@@ -70,6 +70,11 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/raycasting.c \
 				$(GRP_DIR)/raycasting_h.c \
 				$(GRP_DIR)/handle_death_menu.c \
+				$(GRP_DIR)/render_texture_mand.c \
+				$(GRP_DIR)/render_distance_mand.c \
+				$(GRP_DIR)/render_wall_coord_mand.c \
+				$(GRP_DIR)/render_column_mand.c \
+				$(GRP_DIR)/render_column_draw_mand.c \
 				$(GRP_DIR)/floor_render_bonus.c \
 				$(GRP_DIR)/win_screen.c \
 				$(GRP_DIR)/draw_sprite.c \
@@ -104,6 +109,7 @@ COMMON_SRCS =	$(CLN_DIR)/clean_exit.c \
 				$(GRP_DIR)/render_bonus.c \
 				$(GRP_DIR)/resize.c \
 				$(GRP_DIR)/upscale.c \
+				$(GRP_DIR)/upscale_utils.c \
 				$(SRC_DIR)/ft_sprintf.c \
 				$(GMP_DIR)/game_loop_bonus.c \
 				$(GMP_DIR)/game_loop_bonus2.c \

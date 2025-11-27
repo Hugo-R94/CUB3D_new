@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:20:38 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/25 13:19:26 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:26:24 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,24 @@ void	fill_mobs(t_data *data, int mob_count)
 	int	x;
 	int	i;
 
-	y = 0;
+	y = -1;
 	i = 0;
-	while (data->map->map[y])
+	while (data->map->map[++y])
 	{
-		x = 0;
-		while (data->map->map[y][x])
+		x = -1;
+		while (data->map->map[y][++x])
 		{
 			if (data->map->map[y][x] == 'M')
-				init_mob_m(&data->mob[i++], x, y, i - 1);
+			{
+				init_mob_m(&data->mob[i], x, y, i);
+				i++;
+			}
 			else if (data->map->map[y][x] == 'B')
-				init_mob_b(&data->mob[i++], x, y, i - 1);
-			x++;
+			{
+				init_mob_b(&data->mob[i], x, y, i);
+				i++;
+			}
 		}
-		y++;
 	}
 	data->mob_count = mob_count;
 }

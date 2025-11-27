@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:38:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/25 15:25:38 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:23:34 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	clean_data(t_data *data)
 	if (!data)
 		return ;
 	if (data->txt)
-		free_textures(data, data->txt);
+		free_textures(data->txt);
 	if (data->map)
 	{
 		if (data->map->map)
@@ -57,7 +57,7 @@ void	clean_data(t_data *data)
 	free(data);
 }
 
-void	free_textures(t_data *data, t_txt *textures)
+void	free_textures(t_txt *textures)
 {
 	int	i;
 

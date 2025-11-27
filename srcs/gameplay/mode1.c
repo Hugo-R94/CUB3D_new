@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 13:09:46 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/25 13:10:05 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 13:28:52 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	clear_mobs(t_data *data)
 
 void	play_survivor_mode(t_data *data)
 {
-	int	fd;
-
 	if (data->map->map)
 		free_map(data->map->map);
 	survivor_map(data);

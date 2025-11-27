@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:44:02 by hugz              #+#    #+#             */
-/*   Updated: 2025/11/26 11:49:53 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/27 11:41:37 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 float	calculate_mob_distance(t_data *data, int i)
 {
-	float dx;
-	float dy;
+	float	dx;
+	float	dy;
 
 	dx = data->mob[i].mx - data->player.px;
 	dy = data->mob[i].my - data->player.py;
@@ -26,10 +26,10 @@ float	calculate_mob_distance(t_data *data, int i)
 
 static float	get_relative_angle(t_data *data, int i)
 {
-	float dx;
-	float dy;
-	float angle_to_mob;
-	float relative_angle;
+	float	dx;
+	float	dy;
+	float	angle_to_mob;
+	float	relative_angle;
 
 	dx = data->mob[i].mx - data->player.px;
 	dy = data->mob[i].my - data->player.py;
@@ -42,110 +42,66 @@ static float	get_relative_angle(t_data *data, int i)
 	return (relative_angle);
 }
 
-static void	draw_mob_column_mirror(t_data *data, t_txt *tex, int x, int *bounds, float depth, int id)
+static void	get_mob_ratios(t_txt *tex, int *bounds, float *ratios, int x)
 {
-	int y;
-	int tex_x;
-	int tex_y;
-	int color;
-	int index;
-	float tex_ratio_x;
-	float tex_ratio_y;
-	int flipped_tex_x;
-	
-	tex_ratio_x = (float)tex->img.width / (float)bounds[1];
-	tex_ratio_y = (float)tex->img.height / (float)bounds[0];
-	tex_x = get_tex_coord(x, bounds[2], tex_ratio_x, tex->img.width);
-	flipped_tex_x = tex->img.width - 1 - tex_x;
-	y = bounds[4] - 1;
-	while (++y < bounds[5])
-	{
-		if (y < 0 || y >= data->render_gmp->height)
-			continue;
-		
-		tex_y = get_tex_coord(y, bounds[4], tex_ratio_y, tex->img.height);
-		color = get_pixel(&tex->img, flipped_tex_x, tex_y);
-		
-		if (color != 0x000000)
-		{
-			index = y * data->render_gmp->width + x;
-			if (index >= 0 && index < data->render_gmp->width * data->render_gmp->height)
-			{
-				if (data->render_gmp->pixels[index].type == PX_EMPTY 
-					|| depth < data->render_gmp->pixels[index].depth)
-				{
-					data->render_gmp->pixels[index].color = color;
-					data->render_gmp->pixels[index].depth = depth;
-					data->render_gmp->pixels[index].type = PX_MOB;
-					data->render_gmp->pixels[index].id = id;
-				}
-			}
-		}
-	}
+	ratios[0] = (float)tex->img.width / (float)bounds[1];
+	ratios[1] = (float)tex->img.height / (float)bounds[0];
+	ratios[2] = get_tex_coord(x, bounds[2], ratios[0], tex->img.width);
 }
 
-static void	draw_mob_column(t_data *data, t_txt *tex, int x, int *bounds, float depth, int id)
+void	draw_px_info(t_data *data, int index, int color, float *ratios)
+{
+	data->render_gmp->pixels[index].color = color;
+	data->render_gmp->pixels[index].depth = ratios[4];
+	data->render_gmp->pixels[index].type = PX_MOB;
+	data->render_gmp->pixels[index].id = (int)ratios[5];
+}
+
+static void	draw_mob_pixels(t_data *data, t_txt *tex,
+		int *bounds, float *ratios)
 {
 	int		y;
-	int		tex_x;
 	int		tex_y;
 	int		color;
 	int		index;
-	float	tex_ratio_x;
-	float	tex_ratio_y;
-	
-	tex_ratio_x = (float)tex->img.width / (float)bounds[1];
-	tex_ratio_y = (float)tex->img.height / (float)bounds[0];
-	tex_x = get_tex_coord(x, bounds[2], tex_ratio_x, tex->img.width);
+
 	y = bounds[4] - 1;
 	while (++y < bounds[5])
 	{
 		if (y < 0 || y >= data->render_gmp->height)
-			continue;
-		
-		tex_y = get_tex_coord(y, bounds[4], tex_ratio_y, tex->img.height);
-		color = get_pixel(&tex->img, tex_x, tex_y);
-		
+			continue ;
+		tex_y = get_tex_coord(y, bounds[4], ratios[1], tex->img.height);
+		color = get_pixel(&tex->img, (int)ratios[2], tex_y);
 		if (color != 0x000000)
 		{
-			index = y * data->render_gmp->width + x;
-			if (index >= 0 && index < data->render_gmp->width * data->render_gmp->height)
+			index = y * data->render_gmp->width + (int)ratios[3];
+			if (index >= 0 && index < data->render_gmp->width
+				* data->render_gmp->height)
 			{
-				if (data->render_gmp->pixels[index].type == PX_EMPTY 
-					|| depth < data->render_gmp->pixels[index].depth)
-				{
-					data->render_gmp->pixels[index].color = color;
-					data->render_gmp->pixels[index].depth = depth;
-					data->render_gmp->pixels[index].type = PX_MOB;
-					data->render_gmp->pixels[index].id = id;
-				}
+				if (data->render_gmp->pixels[index].type == PX_EMPTY
+					|| ratios[4] < data->render_gmp->pixels[index].depth)
+					draw_px_info(data, index, color, ratios);
 			}
 		}
 	}
 }
 
-static void	draw_mob_sprite(t_data *data, t_txt *tex, int *bounds, float depth, int id)
+static void	draw_mob_sprite(t_data *data, t_txt *tex, int *bounds,
+	float depth_id[2])
 {
-	int			x;
-	static int	t_anim = 0;
-	static int	sprite = 1;
-	 
-	if (t_anim >= 22 && data->game_on)
-	{
-		t_anim = 0;
-		sprite *= -1;
-	}
-	if (data->mob[id].chase)
-		t_anim++;
+	int		x;
+	float	ratios[6];
+
 	x = bounds[2] - 1;
+	ratios[4] = depth_id[0];
+	ratios[5] = (float)depth_id[1];
 	while (++x < bounds[3])
 	{
 		if (x < 0 || x >= data->render_gmp->width)
-			continue;
-		if (sprite == 1)
-			draw_mob_column(data, tex, x, bounds, depth, id);
-		else
-			draw_mob_column_mirror(data, tex, x, bounds, depth, id);
+			continue ;
+		get_mob_ratios(tex, bounds, ratios, x);
+		ratios[3] = (float)x;
+		draw_mob_pixels(data, tex, bounds, ratios);
 	}
 }
 
@@ -155,40 +111,38 @@ void	draw_single_mob(t_data *data, int i, char *txt_name, float height_scale)
 	float	relative_angle;
 	int		bounds[6];
 	t_txt	*mob_tex;
-	int		full_height;
 	int		center_y;
 
 	distance = calculate_mob_distance(data, i);
 	if (distance < 0.1f)
-		return;
+		return ;
 	relative_angle = get_relative_angle(data, i);
 	if (fabs(relative_angle) > data->fov / 2)
-		return;
+		return ;
 	bounds[1] = (int)(data->render_gmp->height / distance * height_scale);
 	bounds[0] = (int)(data->render_gmp->height / distance * height_scale);
-	full_height = (int)(data->render_gmp->height / distance);
-	center_y = (data->render_gmp->height / 2) + data->tilt + data->player.pl_height;
-	bounds[5] = center_y + (full_height / 2);
+	center_y = (data->render_gmp->height / 2)
+		+ data->tilt + data->player.pl_height;
+	bounds[5] = center_y + ((int)(data->render_gmp->height / distance) / 2);
 	bounds[4] = bounds[5] - bounds[0];
 	bounds[2] = get_screen_x(relative_angle, data->fov) - bounds[1] / 2;
 	bounds[3] = bounds[2] + bounds[1];
 	mob_tex = find_texture(data->txt, txt_name);
 	if (!mob_tex)
-		return;
-	draw_mob_sprite(data, mob_tex, bounds, distance, i);
+		return ;
+	draw_mob_sprite(data, mob_tex, bounds, (float []){distance, i});
 }
 
 void	check_mob_state(t_data *data)
 {
 	int	i;
-	
+
 	i = -1;
 	while (++i < data->mob_count)
 	{
 		if (data->mob[i].hp <= 0)
 			data->mob[i].is_alive = 0;
 	}
-	
 }
 
 void	draw_mobs(t_data *data)
@@ -200,7 +154,7 @@ void	draw_mobs(t_data *data)
 	while (i < data->mob_count && data->mob[i].mx != 0)
 	{
 		if (data->mob[i].is_alive)
-			draw_single_mob(data, i,data->mob[i].sprite, data->mob[i].size);
+			draw_single_mob(data, i, data->mob[i].sprite, data->mob[i].size);
 		i++;
 	}
 }
