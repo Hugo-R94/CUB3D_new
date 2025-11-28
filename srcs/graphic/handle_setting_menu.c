@@ -6,7 +6,7 @@
 /*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 11:43:03 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/27 14:01:05 by hugz             ###   ########.fr       */
+/*   Updated: 2025/11/28 12:56:09 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	choose_sensi(t_data *data)
 		g_setting_menu_button[6].x = 520;
 	if (data->mouse.mouse_button_lc == 0)
 		data->slider_button2 = 0;
-	data->mouse.sensitivity = 0.000006
+	data->mouse.sensitivity = 0.000003
 		* ((float)g_setting_menu_button[6].x / 2.7 - 92.59) + 0.0002;
 	sensi = ft_itoa((float)g_setting_menu_button[6].x / 2.7 - 92.59);
 	if (data->mouse.sensitivity <= 0.00021)

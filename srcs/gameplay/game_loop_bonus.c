@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrouchy <hrouchy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hugz <hugz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 11:34:38 by hrouchy           #+#    #+#             */
-/*   Updated: 2025/11/27 15:31:32 by hrouchy          ###   ########.fr       */
+/*   Updated: 2025/11/28 12:54:36 by hugz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	setup_hooks(t_data *data)
 void	mlx_game_loop(t_data *data)
 {
 	setup_hooks(data);
+	mlx_mouse_hide(data->win->mlx, data->win->win);
 	mlx_loop(data->win->mlx);
 }
 
